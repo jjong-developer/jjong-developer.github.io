@@ -463,6 +463,10 @@ dbAuth().onAuthStateChanged((user) => { // 로그인 상태 여/부
                             '<img src="./images/sns/github_icon.png" title="깃허브 이메일로 로그인" alt="깃허브 이메일로 로그인" />' +
                             '<span>github</span>' +
                         '</button>' +
+                        '<button class="sns-sign-in-info" type="button" onclick="signInUp(this);">' +
+                            '<img src="./images/sns/kakao_icon.png" title="카카오 이메일로 로그인" alt="카카오 이메일로 로그인" />' +
+                            '<span>kakao</span>' +
+                        '</button>' +
                     '</div>' +
                 '</div>' +
                 '<div class="sign-info-box">' +
@@ -619,7 +623,7 @@ dbFireStore().collection('site').get().then((snapshot) => { // 컬랙션 site에
                                             title: siteName.value, // 이름
                                             description: siteDescription.value, // 설명
                                             link: siteLink.value, // 주소
-                                            thumbnailUrl: siteThumbnailUrl, // 썸네일 이미지 주소
+                                            thumbnailUrl: (siteThumbnailUrl === '') ? document.querySelector('.file-name').value : siteThumbnailUrl, // 썸네일 이미지 주소
                                         };
 
                                         dbFireStore().collection('site').doc(e.target.dataset.id).update(dataUpdateSave).then(() => {
@@ -815,6 +819,13 @@ function signInUp(self) {
         dbAuth().signInWithRedirect(facebookProvider);
     } else if (self.textContent === 'github') {
         dbAuth().signInWithRedirect(githubProvider);
+        // dbAuth().getRedirectResult().then((result) => { // 인증 절차 진행 전 페이지가 로드될때 OAuth 토큰 정보를 가져와서 볼 수 있음
+        //     alert(JSON.stringify(githubProvider));
+        // }).catch((error) => {
+        //     windowPopup('잠시 후 다시 시도해주세요.'+error.message);
+        // });
+    } else if (self.textContent === 'kakao') {
+        windowPopup('서비스 개발중입니다.');
     } else if (self.textContent === '가입하기') {
         let userName = document.querySelector('input[name=name]').value;
         let user_rePassword = document.querySelector('input[name=re_password]').value;
