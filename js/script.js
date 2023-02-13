@@ -124,8 +124,8 @@ const emailCheck = (str) => { // 이메일 정규식 체크 함수
 
 const portfolioSite = () => { // 포트폴리오 사이트 글 등록, 수정 모달 함수
     modal(
-        '프로젝트를 등록 해보세요 :)',
-        '<div>' +
+    '프로젝트를 등록 해보세요 :)',
+'<div>' +
             '<div class="modal-select-box-wrap">' +
                 '<select id="siteCategories" class="modal-select-box">' +
                     '<option value="" selected="selected" disabled>분류 선택</option>' +
