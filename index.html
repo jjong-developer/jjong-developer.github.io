@@ -1,0 +1,536 @@
+<!doctype html>
+<html lang="ko">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=1.0, user-scalable=no">
+    <meta name="description" content="쫑dev님의 포트폴리오 소개 사이트입니다.">
+    <meta name="keywords" content="html, css, scss, javascript, vue, developer, develop, front-end, front, frontend, portfolio, 개발자, 프론트앤드, 포트폴리오">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="포트폴리오 소개 사이트">
+    <meta property="og:description" content="쫑dev님의 포트폴리오 소개 사이트입니다.">
+    <meta property="og:url" content="https://kimjongwook2.github.io">
+    <meta property="og:image" content="https://kimjongwook2.github.io/og_image.png">
+    <title>포트폴리오 소개 사이트</title>
+
+    <link rel="shortcut icon" href="./images/favicon.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.5.1/css/swiper.min.css">
+    <link rel="stylesheet" href="./css/style.css"> <!-- 통합 style -->
+    <link rel="stylesheet" href="./css/responsive.css"> <!-- 통합 반응형 style -->
+</head>
+
+<body>
+
+<!-- header gnb menu -->
+<header class="header">
+    <div id="nameView" class="information-view"></div>
+    <nav class="nav">
+        <div class="logo">
+            <a href="./">쫑</a>
+        </div>
+        <ul class="menu">
+            <li data-offset="#about">about</li>
+            <li data-offset="#portfolio">portfolio sites</li>
+            <li data-offset="#skill">use skills</li>
+            <li class="sign-in-out">
+                <button id="signInOutBtn" type="button">sign in</button>
+            </li>
+        </ul>
+        <!-- 모바일 메뉴 버튼 -->
+        <button id="mobileMenuBtn" class="mobile-menu-btn" type="button">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="40" height="40"><path fill="none" d="M0 0h24v24H0z"/><path d="M3 4h18v2H3V4zm6 7h12v2H9v-2zm-6 7h18v2H3v-2z" fill="rgba(255,255,255,1)"/></svg>
+        </button>
+    </nav>
+</header>
+
+<!-- about section -->
+<div id="aboutBg">
+    <section id="about" class="section section-pdt">
+        <div class="about ide-style">
+            <div class="json-type-1">
+                <h2 class="title" data-offset="#about">
+                    <span>about</span>
+                    <strong>{</strong>
+                </h2>
+                <dl>
+                    <!-- 본인 소개 -->
+                    <dt>
+                        <span>JONG | SEO 검색엔진에 최적한 된 개발자 입니다 !</span>
+                        <strong>{</strong>
+                    </dt>
+                    <dd>
+                        <div class="json-type-2">
+                            <div class="about-content">
+                                <ul>
+                                    <li>
+                                        <span>name</span>
+                                        <p>김종욱</p>
+                                    </li>
+                                    <li>
+                                        <span>age</span>
+                                        <p>1994.09.06</p>
+                                    </li>
+                                    <li>
+                                        <span>introduce</span>
+                                        <p>
+                                            4년 차 개발자로 스타트업에서 웹/앱과 하이브리드 서비스를 개발/운영하였습니다.
+                                            주로 웹 서비스 개발을 담당하였으며 필요에 따라 PO(Product Owner) 역할을 겸하였습니다.
+                                        </p>
+                                    </li>
+                                    <li class="flex-start">
+                                        <span>channel</span>
+                                        <div>
+                                            <div>
+                                                <span>
+                                                    gitHub. <a href="https://github.com/kimjongwook2" target="_blank">https://github.com/kimjongwook2</a>
+                                                </span>
+                                            </div>
+                                            <div>
+                                                <span>
+                                                    blog. <a href="https://velog.io/@jong_dev" target="_blank">https://velog.io/@jong_dev</a>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <strong>}</strong>
+                    </dd>
+
+                    <!-- 경험한 일 -->
+                    <dt>
+                        <span>experiences</span>
+                        <strong>{</strong>
+                    </dt>
+                    <dd>
+                        <div class="json-type-2">
+                            <div class="about-defalut-content">
+                                <ul>
+                                    <li>
+                                        <span>준비중</span>
+                                        <p>준비중</p>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <strong>}</strong>
+                    </dd>
+
+                    <!-- 학력/교육 수료 과정 -->
+                    <dt>
+                        <span>education</span>
+                        <strong>{</strong>
+                    </dt>
+                    <dd>
+                        <div class="json-type-2">
+                            <div class="about-defalut-content">
+<!--                                <ul>-->
+<!--                                    <li>-->
+<!--                                        <span>그린컴퓨터아카데미 신촌점</span>-->
+<!--                                        <p>(2018.06 ~ 2018.12) 스마트형 웹 콘텐츠 양성과정 수료</p>-->
+<!--                                    </li>-->
+<!--                                    <li>-->
+<!--                                        <span>병역</span>-->
+<!--                                        <p>(2014.03 ~ 2015.12) 육군 병장 만기전역</p>-->
+<!--                                    </li>-->
+<!--                                    <li>-->
+<!--                                        <span>청주대학교 컴퓨터정보공학과</span>-->
+<!--                                        <p>(2013.03 ~ 2019.02) 졸업</p>-->
+<!--                                    </li>-->
+<!--                                </ul>-->
+                            </div>
+                        </div>
+                        <strong>}</strong>
+                    </dd>
+                </dl>
+                <strong>}</strong>
+            </div>
+        </div>
+    </section>
+</div>
+
+<!-- portfolio sites section -->
+<!--    <section id="portfolio" class="section">-->
+<!--        <div class="portfolio">-->
+<!--            <h2 class="title">-->
+<!--                <strong><</strong>-->
+<!--                portfolio-->
+<!--                <strong>/></strong>-->
+<!--            </h2>-->
+<!--            <div>준비중</div>-->
+<!--        </div>-->
+<!--    </section>-->
+<section id="portfolio" class="section">
+    <div class="portfolio">
+        <div class="json-type-1">
+            <h2 class="title" data-offset="#portfolio">
+                <span>portfolio sites</span>
+                <strong>{</strong>
+            </h2>
+            <dl>
+                <div class="sub-title-wrap">
+                    <h2 class="sub-title">최근 4년간 진행한 프로젝트를 확인하세요</h2>
+                    <div id="portfolioSiteUpload">
+                        <button id="portfolioSiteWriteBtn" class="btn-type-1 auth-btn" type="button">등록</button>
+                    </div>
+                </div>
+
+                <div class="tab-menu">
+                    <ul class="tab-menu-categories">
+                        <li class="active">쇼핑몰</li>
+                        <li>호텔/팬션</li>
+                        <li>교육/IT솔루션 서비스</li>
+                        <li>제조장비 반도체산업</li>
+                        <li>기타</li>
+                    </ul>
+                </div>
+
+                <!-- 쇼핑몰 -->
+                <div id="shoppingMall" class="tab-menu-content active">
+                    <dt>
+                        <span>shopping mall</span>
+                        <strong>{</strong>
+                    </dt>
+                    <dd>
+                        <div class="json-type-2">
+                            <div id="shoppingMallList" class="site-list-wrap"></div>
+                        </div>
+                        <strong>}</strong>
+                    </dd>
+                </div>
+
+                <!-- 호텔/팬션 -->
+                <div id="hotel" class="tab-menu-content">
+                    <dt>
+                        <span>hotel</span>
+                        <strong>{</strong>
+                    </dt>
+                    <dd>
+                        <div class="json-type-2">
+                            <div id="hotelList" class="site-list-wrap"></div>
+                        </div>
+                        <strong>}</strong>
+                    </dd>
+                </div>
+
+                <!-- 교육/IT솔루션 서비스 -->
+                <div id="solutionService" class="tab-menu-content">
+                    <dt>
+                        <span>solution service</span>
+                        <strong>{</strong>
+                    </dt>
+                    <dd>
+                        <div class="json-type-2">
+                            <div id="solutionServiceList" class="site-list-wrap"></div>
+                        </div>
+                        <strong>}</strong>
+                    </dd>
+                </div>
+
+                <!-- 제조장비 반도체산업 -->
+                <div id="semiconductor" class="tab-menu-content">
+                    <dt>
+                        <span>semiconductor</span>
+                        <strong>{</strong>
+                    </dt>
+                    <dd>
+                        <div class="json-type-2">
+                            <div id="semiconductorList" class="site-list-wrap"></div>
+                        </div>
+                        <strong>}</strong>
+                    </dd>
+                </div>
+
+                <!-- 기타 -->
+                <div id="etc" class="tab-menu-content">
+                    <dt>
+                        <span>etc</span>
+                        <strong>{</strong>
+                    </dt>
+                    <dd>
+                        <div class="json-type-2">
+                            <div id="etcList" class="site-list-wrap"></div>
+                        </div>
+                        <strong>}</strong>
+                    </dd>
+                </div>
+            </dl>
+            <strong>}</strong>
+        </div>
+    </div>
+</section>
+
+<!-- use skills section -->
+<section id="skill" class="section">
+    <div class="skill">
+        <div class="json-type-1">
+            <h2 class="title" data-offset="#skill">
+                <span>use skills</span>
+                <strong>{</strong>
+            </h2>
+            <dl>
+                <!-- 협업 소통 -->
+                <dt>
+                    <span>communication</span>
+                    <strong>{</strong>
+                </dt>
+                <dd>
+                    <div class="json-type-2">
+                        <div>
+                            <div class="swiper-container swiper-tool-container">
+                                <div class="swiper-wrapper">
+                                    <div class="swiper-slide">
+                                        <div class="skill-box" data-skill="70%">
+                                            <img src="./images/skills/github.png" alt="github" />
+                                        </div>
+                                    </div>
+                                    <div class="swiper-slide">
+                                        <div class="skill-box" data-skill="80%">
+                                            <img src="./images/skills/zeplin.png" alt="zeplin" />
+                                        </div>
+                                    </div>
+                                    <div class="swiper-slide">
+                                        <div class="skill-box" data-skill="50%">
+                                            <img src="./images/skills/photoshop.png" alt="adobe photoshop" />
+                                        </div>
+                                    </div>
+                                    <div class="swiper-slide">
+                                        <div class="skill-box" data-skill="80%">
+                                            <img src="./images/skills/xd.png" alt="adobe xd" />
+                                        </div>
+                                    </div>
+                                    <div class="swiper-slide">
+                                        <div class="skill-box">
+                                            <img src="./images/skills/channel_talk.png" alt="channel talk" />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="swiper-tool-arrow">
+                                    <div class="swiper-button-next">
+                                        <img src="./images/slide_next.svg" alt="다음" />
+                                    </div>
+                                    <div class="swiper-button-prev">
+                                        <img src="./images/slide_prev.svg" alt="이전" />
+                                    </div>
+                                </div>
+
+                                <div class="swiper-scrollbar"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <strong>}</strong>
+                </dd>
+
+                <!-- 개발시 사용 언어 -->
+                <dt>
+                    <span>development</span>
+                    <strong>{</strong>
+                </dt>
+                <dd>
+                    <div class="json-type-2">
+                        <div>
+                            <div class="swiper-container swiper-tool-container">
+                                <div class="swiper-wrapper">
+                                    <div class="swiper-slide">
+                                        <div class="skill-box" data-skill="90%">
+                                            <img src="./images/skills/html.png" alt="html" />
+                                        </div>
+                                    </div>
+                                    <div class="swiper-slide">
+                                        <div class="skill-box" data-skill="90%">
+                                            <img src="./images/skills/css.png" alt="css" />
+                                        </div>
+                                    </div>
+                                    <div class="swiper-slide">
+                                        <div class="skill-box" data-skill="60%">
+                                            <img src="./images/skills/scss.png" alt="scss" />
+                                        </div>
+                                    </div>
+                                    <div class="swiper-slide">
+                                        <div class="skill-box" data-skill="65%">
+                                            <img src="./images/skills/vue.png" alt="vue" />
+                                        </div>
+                                    </div>
+                                    <div class="swiper-slide">
+                                        <div class="skill-box" data-skill="70%">
+                                            <img src="./images/skills/javascript.png" alt="javascript" />
+                                        </div>
+                                    </div>
+                                    <div class="swiper-slide">
+                                        <div class="skill-box" data-skill="85%">
+                                            <img src="./images/skills/jquery.png" alt="jquery" />
+                                        </div>
+                                    </div>
+                                    <div class="swiper-slide">
+                                        <div class="skill-box" data-skill="95%">
+                                            <img src="./images/skills/bootstrap.png" alt="bootstrap" />
+                                        </div>
+                                    </div>
+                                    <div class="swiper-slide">
+                                        <div class="skill-box" data-skill="50%">
+                                            <img src="./images/skills/firebase.png" alt="firebase" />
+                                        </div>
+                                    </div>
+                                    <div class="swiper-slide">
+                                        <div class="skill-box" data-skill="95%">
+                                            <img src="./images/skills/gnuboard.png" alt="gnuboard" />
+                                        </div>
+                                    </div>
+                                    <div class="swiper-slide">
+                                        <div class="skill-box" data-skill="70%">
+                                            <img src="./images/skills/wordpress.png" alt="wordpress" />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="swiper-tool-arrow">
+                                    <div class="swiper-button-next">
+                                        <img src="./images/slide_next.svg" alt="다음" />
+                                    </div>
+                                    <div class="swiper-button-prev">
+                                        <img src="./images/slide_prev.svg" alt="이전" />
+                                    </div>
+                                </div>
+
+                                <div class="swiper-scrollbar"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <strong>}</strong>
+                </dd>
+
+                <!-- 호스팅 -->
+                <dt>
+                    <span>hosting</span>
+                    <strong>{</strong>
+                </dt>
+                <dd>
+                    <div class="json-type-2">
+                        <div>
+                            <div class="swiper-container swiper-tool-container">
+                                <div class="swiper-wrapper">
+                                    <div class="swiper-slide">
+                                        <div class="skill-box">
+                                            <img src="./images/skills/vultr.png" alt="vultr" />
+                                        </div>
+                                    </div>
+                                    <div class="swiper-slide">
+                                        <div class="skill-box">
+                                            <img src="./images/skills/dothome.png" alt="dothome" />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="swiper-tool-arrow">
+                                    <div class="swiper-button-next">
+                                        <img src="./images/slide_next.svg" alt="다음" />
+                                    </div>
+                                    <div class="swiper-button-prev">
+                                        <img src="./images/slide_prev.svg" alt="이전" />
+                                    </div>
+                                </div>
+
+                                <div class="swiper-scrollbar"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <strong>}</strong>
+                </dd>
+            </dl>
+            <strong>}</strong>
+        </div>
+    </div>
+</section>
+
+<!-- footer -->
+<footer class="footer">
+    <div class="footer-info-wrap">
+        <dl>
+            <dt>
+                <svg version="1.1" id="Layer_1" fill="none" stroke="#3e54d3" width="24" stroke-width="2.5" stroke-linecap="round" xmlns="http://www.w3.org/2000/svg" x="0" y="0" viewBox="0 0 18.9 16.7" xml:space="preserve">
+                    <g id="Group_543" transform="translate(1.755 1.758)">
+                        <path id="Line_48" class="st0" d="M1.3 6.4l4.5 5.8"/>
+                        <path id="Line_49" class="st0" d="M5.8 12.2l9-11"/>
+                    </g>
+                </svg>
+                함께 나누고 싶은 얘기가 있으시다면
+            </dt>
+            <dd>
+                <button id="channelTalk" type="button">채널톡으로</button>
+            </dd>
+            <dd>연락주시면 평균 2일 내로 답장을 드릴게요 !</dd>
+        </dl>
+        <div class="footer-info">
+            <div class="footer-sns">
+                <a href="https://github.com/kimjongwook2" target="_blank">GitHub</a>
+                <a href="https://velog.io/@jong_dev" target="_blank">Blog</a>
+<!--                <a href="https://kimjongwook2.github.io/techblog/" target="_blank">Blog</a>-->
+            </div>
+            <div class="copyright">
+                <span>Front-End Developer,</span>
+                <a href="https://github.com/kimjongwook2" target="_blank">@JONG</a>
+                <p>본 사이트는 vanilla javscript / firebase v8.10.1 사용하여 제작되었습니다.</p>
+                <p>본 사이트는 관리자 기능이 포함되어 일부러 노출을 하고있습니다.</p>
+                <p>본 사이트는 상업적 목적이 아닌 개인 포트폴리오용으로 제작되었습니다.</p>
+                <p>©Copyright 2023. All right reserved</p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- top button -->
+<button id="topBtn" class="top-btn" type="button">
+    <img src="./images/top_btn.svg" alt="top" />
+</button>
+
+</body>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.5.1/js/swiper.min.js"></script>
+
+<!-- firebase -->
+<script type="text/javascript" src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script type="text/javascript" src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+<script type="text/javascript" src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+<script type="text/javascript" src="https://www.gstatic.com/firebasejs/8.10.1/firebase-storage.js"></script>
+<script>
+    const firebaseConfig = {
+        apiKey: "AIzaSyC_RVRz1pE_L9C1DXzyuREEwSKDCGsmkx4",
+        authDomain: "jongwook-portfolio-site.firebaseapp.com",
+        projectId: "jongwook-portfolio-site",
+        storageBucket: "jongwook-portfolio-site.appspot.com",
+        messagingSenderId: "297183677830",
+        appId: "1:297183677830:web:c5e7b906500ea8d35c3007"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+</script>
+<!--<script type="module">-->
+<!--    import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.17.1/firebase-app.js';-->
+<!--    import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/9.17.1/firebase-auth.js';-->
+<!--    import { getFirestore } from 'https://www.gstatic.com/firebasejs/9.17.1/firebase-firestore.js';-->
+<!--    import { getStorage } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-storage.js"-->
+
+<!--    const firebaseConfig = {-->
+<!--        apiKey: "AIzaSyC_RVRz1pE_L9C1DXzyuREEwSKDCGsmkx4",-->
+<!--        authDomain: "jongwook-portfolio-site.firebaseapp.com",-->
+<!--        projectId: "jongwook-portfolio-site",-->
+<!--        storageBucket: "jongwook-portfolio-site.appspot.com",-->
+<!--        messagingSenderId: "297183677830",-->
+<!--        appId: "1:297183677830:web:c5e7b906500ea8d35c3007"-->
+<!--    };-->
+
+<!--    const firebaseApp = initializeApp(firebaseConfig);-->
+<!--    const dbAuth = getAuth(firebaseApp);-->
+<!--    const dbFirebase = getFirestore(firebaseApp);-->
+<!--    const dbStorage = getStorage(firebaseApp);-->
+
+<!--    // onAuthStateChanged(dbAuth, user => {-->
+<!--    //-->
+<!--    // })-->
+<!--</script>-->
+
+<script type="text/javascript" src="./js/common.js"></script>
+<script type="text/javascript" src="./js/script.js"></script>
+
+</html>

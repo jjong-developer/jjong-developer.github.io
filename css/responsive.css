@@ -1,0 +1,155 @@
+@charset "UTF-8";
+
+@media (min-width: 768px) {
+    /**
+        header gnb
+     */
+    .header {
+        height: unset !important;
+    }
+}
+
+@media (max-width: 1310px) {
+    /**
+        defalut
+    */
+    .nav,
+    .section,
+    .information-view,
+    .footer-info-wrap {
+        padding: 0 30px 0 30px;
+    }
+}
+
+@media (max-width: 767px) {
+    /**
+        defalut
+    */
+    .nav,
+    .section,
+    .information-view,
+    .footer-info-wrap {
+        max-width: 100%;
+    }
+
+    /**
+        common
+    */
+    .json-type-1 dl {
+        padding: 60px 0 60px 40px;
+    }
+    .modal-wrap {
+        width: 100%;
+        max-width: 650px;
+    }
+
+    /**
+        header gnb
+     */
+    .nav .mobile-menu-btn {
+        position: fixed;
+        right: 30px;
+        display: block;
+        z-index: 9999;
+    }
+    .nav .mobile-menu-btn svg {
+        position: relative;
+    }
+    .nav .mobile-menu-btn svg.close-icon {
+        right: -10px;
+    }
+    .nav .menu {
+        position: fixed;
+        top: 0;
+        right: -100%;
+        display: grid;
+        justify-items: center;
+        align-content: center;
+        gap: 60px;
+        width: 100%;
+        height: 100%;
+        transition: right 0.3s ease-in-out;
+        background: #000000;
+    }
+    .nav .menu li {
+        font-size: 30px;
+    }
+    .nav .menu li.sign-in-out button {
+        font-size: 24px;
+    }
+
+    /**
+        footer
+    */
+    .footer-info {
+        display: block;
+    }
+    .copyright {
+        text-align: unset;
+        margin: 20px 0 0 0;
+    }
+}
+
+@media (max-width: 500px) {
+    /**
+        defalut
+    */
+    .nav,
+    .section,
+    .information-view,
+    .footer-info-wrap {
+        padding: 0 20px 0 20px;
+    }
+
+    /**
+        common
+    */
+    .title {
+        font-size: 38px;
+    }
+    .json-type-1 strong {
+        font-size: 40px;
+    }
+    .json-type-1 dl {
+        padding: 60px 0 50px 20px;
+    }
+    .json-type-1 dl dt {
+        font-size: 26px;
+    }
+    .json-type-1 dl strong {
+        font-size: 28px;
+    }
+    .json-type-2 {
+        padding: 40px 0 40px 0;
+        border-left: none;
+    }
+    .modal-wrap {
+        max-width: 380px;
+    }
+
+    /**
+        use skills
+    */
+    .swiper-tool-container {
+        padding: 0 0 100px 0;
+    }
+
+    /**
+        footer
+    */
+    .footer {
+        padding: 50px 0 30px 0;
+    }
+    .footer dl dt {
+        font-size: 22px;
+    }
+    .footer dl dd #channelTalk {
+        font-size: 32px;
+    }
+    .copyright {
+        text-align: left;
+    }
+    .footer-sns {
+        text-align: left;
+    }
+}
