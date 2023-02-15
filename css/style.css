@@ -274,6 +274,20 @@ img {max-width: 100%;}
     padding: 10px 20px 10px 20px;
     border-radius: 20px;
 }
+.btn-type-2 {
+    font-family: 'Roboto', sans-serif;
+    width: 100%;
+    max-width: 150px;
+    height: 50px;
+    background: #000000;
+    border: 1px solid #676767;
+    transition: 0.2s;
+}
+.btn-type-2:hover {
+    border: 1px solid #000000;
+    background: #ffffff;
+    color: #000000;
+}
 .bg-danger {
     background: #bb2121 !important;
 }
@@ -308,6 +322,10 @@ img {max-width: 100%;}
 }
 .modal-select-box:last-child {
     margin: 0 0 15px 0;
+}
+.more-view {
+    margin: 50px 0 0 0;
+    text-align: center;
 }
 
 /**
