@@ -508,22 +508,50 @@ dbAuth().onAuthStateChanged((user) => { // 로그인 상태 여/부
 let siteNoListTempleat = '' +
     '<div>게시물이 없습니다.</div>';
 
-dbFireStore().collection('site').where('categories', '==', '쇼핑몰').limit(2).get().then((result) => {
+dbFireStore().collection('site').where('categories', '==', '쇼핑몰').get().then((result) => {
+    // 게시물이 총 9개 있음
     if (result.docs.length === 0) {
         document.querySelector('#shoppingMallList').innerHTML = siteNoListTempleat;
     }
 
-    result.forEach((doc) => {
-        let docData = doc.data();
-        let categoriesName = doc.data().categories;
-        const siteListTempleat = '' +
-            '<div id="'+ doc.id +'" class="site-thumbnail-box">' +
-                '<img src="' + docData.thumbnailUrl + '" title="' + docData.title + '" />' +
-            '</div>';
+    console.log(result.docs);
 
-        if (categoriesName === '쇼핑몰') {
+    dbFireStore().collection('site').where('categories', '==', '쇼핑몰').limit(4).get().then((resultTest) => {
+        resultTest.forEach((doc) => {
+            let docData = doc.data();
+
+            const siteListTempleat = '' +
+                '<div id="'+ doc.id +'" class="site-thumbnail-box">' +
+                '<img src="' + docData.thumbnailUrl + '" title="' + docData.title + '" />' +
+                '</div>';
+
+            const moreViewTempleat = '' +
+                '<button id="moreBtn" class="btn-type-2" type="button">' +
+                'MORE' +
+                '</button>';
+
             document.querySelector('#shoppingMallList').innerHTML += siteListTempleat;
-        }
+            document.querySelector('.more-view').innerHTML = moreViewTempleat;
+
+            document.querySelector('#moreBtn').addEventListener('click', () => { // 게시물 더 불러오기
+                let lastVisible = resultTest.docs[resultTest.docs.length - 1];
+                console.log(lastVisible);
+
+                dbFireStore().collection('site').where('categories', '==', '쇼핑몰').startAfter(lastVisible).limit(4).get().then((resultTest22) => {
+                    console.log(result.docs.length - 4 - resultTest22.docs.length);
+
+                    resultTest22.forEach((doc) => {
+                        const siteListTempleataaaa = '' +
+                            '<div id="'+ doc.id +'" class="site-thumbnail-box">' +
+                            '<img src="' + docData.thumbnailUrl + '" />' +
+                            '</div>';
+
+                        document.querySelector('#shoppingMallList').innerHTML += siteListTempleataaaa;
+                        // dkqkqkac();
+                    });
+                });
+            });
+        });
     });
 });
 
@@ -534,15 +562,13 @@ dbFireStore().collection('site').where('categories', '==', '호텔/팬션').limi
 
     result.forEach((doc) => {
         let docData = doc.data();
-        let categoriesName = doc.data().categories;
+
         const siteListTempleat = '' +
             '<div id="'+ doc.id +'" class="site-thumbnail-box">' +
             '<img src="' + docData.thumbnailUrl + '" title="' + docData.title + '" />' +
             '</div>';
 
-        if (categoriesName === '호텔/팬션') {
-            document.querySelector('#hotelList').innerHTML += siteListTempleat;
-        }
+        document.querySelector('#hotelList').innerHTML += siteListTempleat;
     });
 });
 
@@ -553,15 +579,13 @@ dbFireStore().collection('site').where('categories', '==', '교육/IT솔루션 �
 
     result.forEach((doc) => {
         let docData = doc.data();
-        let categoriesName = doc.data().categories;
+
         const siteListTempleat = '' +
             '<div id="'+ doc.id +'" class="site-thumbnail-box">' +
             '<img src="' + docData.thumbnailUrl + '" title="' + docData.title + '" />' +
             '</div>';
 
-        if (categoriesName === '교육/IT솔루션 서비스') {
-            document.querySelector('#solutionServiceList').innerHTML += siteListTempleat;
-        }
+        document.querySelector('#solutionServiceList').innerHTML += siteListTempleat;
     });
 });
 
@@ -572,15 +596,13 @@ dbFireStore().collection('site').where('categories', '==', '제조장비 반도�
 
     result.forEach((doc) => {
         let docData = doc.data();
-        let categoriesName = doc.data().categories;
+
         const siteListTempleat = '' +
             '<div id="'+ doc.id +'" class="site-thumbnail-box">' +
             '<img src="' + docData.thumbnailUrl + '" title="' + docData.title + '" />' +
             '</div>';
 
-        if (categoriesName === '제조장비 반도체산업') {
-            document.querySelector('#semiconductorList').innerHTML += siteListTempleat;
-        }
+        document.querySelector('#semiconductorList').innerHTML += siteListTempleat;
     });
 });
 
@@ -591,142 +613,144 @@ dbFireStore().collection('site').where('categories', '==', '기타').limit(2).ge
 
     result.forEach((doc) => {
         let docData = doc.data();
-        let categoriesName = doc.data().categories;
+
         const siteListTempleat = '' +
             '<div id="'+ doc.id +'" class="site-thumbnail-box">' +
             '<img src="' + docData.thumbnailUrl + '" title="' + docData.title + '" />' +
             '</div>';
 
-        if (categoriesName === '기타') {
-            document.querySelector('#etcList').innerHTML += siteListTempleat;
-        }
+        document.querySelector('#etcList').innerHTML += siteListTempleat;
     });
 });
 
-dbFireStore().collection('site').get().then((snapshot) => {
-    snapshot.forEach((doc) => {
-        let docData = doc.data();
+let dkqkqkac = () => {
+    dbFireStore().collection('site').get().then((snapshot) => {
+        snapshot.forEach((doc) => {
+            let docData = doc.data();
 
-        // 이슈가 있어서 settimeout 임시로.. 추후에 변경해야함
-        setTimeout(() => {
-            const siteThumbnailTempleat = '' +
-                '<div class="site-thumbnail-view site-thumbnail-view-'+ doc.id +'">' +
+            // settimeout 임시로.. 추후에 변경해야함
+            setTimeout(() => {
+                const siteThumbnailTempleat = '' +
+                    '<div class="site-thumbnail-view site-thumbnail-view-'+ doc.id +'">' +
                     '<div class="btn-wrap">' +
-                        '<button id="modifyBtn" class="btn-type-1 site-thumbnail-view-btn" data-id="'+ doc.id +'" type="button">수정</button>' +
-                        '<button id="deleteBtn" class="btn-type-1 bg-danger site-thumbnail-view-btn" data-id="'+ doc.id +'" type="button">삭제</button>' +
+                    '<button id="modifyBtn" class="btn-type-1 site-thumbnail-view-btn" data-id="'+ doc.id +'" type="button">수정</button>' +
+                    '<button id="deleteBtn" class="btn-type-1 bg-danger site-thumbnail-view-btn" data-id="'+ doc.id +'" type="button">삭제</button>' +
                     '</div>' +
                     '<span class="site-thumbnail-view-type">' + docData.type + '</span>' +
                     '<h3 class="site-thumbnail-view-title">' + docData.title + '</h3>' +
                     '<p class="site-thumbnail-view-description">' + docData.description + '</p>' +
                     '<a class="site-thumbnail-view-link" href="' + docData.link + '" target="_blank">' +
-                        'view more' +
+                    'view more' +
                     '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="none" d="M0 0h24v24H0z"/><path d="M13.172 12l-4.95-4.95 1.414-1.414L16 12l-6.364 6.364-1.414-1.414z" fill="rgba(255,255,255,1)"/></svg>' +
                     '</a>' +
-                '</div>';
+                    '</div>';
 
-            // querySelector는 인자값으로 숫자를 받지못해서 id를 지정했을때 고유의 값이라 숫자를 인식 못하여 getElementById 함수로 사용함
-            // 예) id="5RLvZOBC1iPl3UEO0nwD"
-            let docID = document.getElementById(''+ doc.id +'')
+                // querySelector는 인자값으로 숫자를 받지못해서 id를 지정했을때 고유의 값이라 숫자를 인식 못하여 getElementById 함수로 사용함
+                // 예) id="5RLvZOBC1iPl3UEO0nwD"
+                let docID = document.getElementById(''+ doc.id +'')
 
-            // 상단에 siteListTempleat 변수에 정의한 html의 doc.id(문서의 고유id)값을 가져와서 매치하여 이벤트 실행
-            docID.addEventListener('mouseenter', () => {
-                document.getElementById(''+ doc.id +'').insertAdjacentHTML('afterbegin', siteThumbnailTempleat);
+                // 상단에 siteListTempleat 변수에 정의한 html의 doc.id(문서의 고유id)값을 가져와서 매치하여 이벤트 실행
+                docID.addEventListener('mouseenter', () => {
+                    document.getElementById(''+ doc.id +'').insertAdjacentHTML('afterbegin', siteThumbnailTempleat);
 
-                /**
-                 * portfolio sites write update
-                 */
-                document.querySelectorAll('#modifyBtn').forEach((el) => { // 수정
-                    el.addEventListener('click', () => {
-                        if (isUser) {
-                            portfolioSite();
-                            siteCategoriesSelected();
-                            siteTypeSelected();
-                            fileChange();
+                    /**
+                     * portfolio sites write update
+                     */
+                    document.querySelectorAll('#modifyBtn').forEach((el) => { // 수정
+                        el.addEventListener('click', () => {
+                            if (isUser) {
+                                portfolioSite();
+                                siteCategoriesSelected();
+                                siteTypeSelected();
+                                fileChange();
 
-                            document.querySelector('#writeBtn').id = 'writeModifyBtn';
-                            document.querySelector('.modal-title h2').textContent = '프로젝트를 수정 해보세요 :)';
-                            document.querySelector('#writeModifyBtn').textContent = '수정하기';
-                            document.querySelector('#writeModifyBtn').dataset.id = el.getAttribute('data-id');
+                                document.querySelector('#writeBtn').id = 'writeModifyBtn';
+                                document.querySelector('.modal-title h2').textContent = '프로젝트를 수정 해보세요 :)';
+                                document.querySelector('#writeModifyBtn').textContent = '수정하기';
+                                document.querySelector('#writeModifyBtn').dataset.id = el.getAttribute('data-id');
 
-                            document.querySelector('#siteName').value = docData.title;
-                            document.querySelector('#siteDescription').value = docData.description;
-                            document.querySelector('#siteLink').value = docData.link;
-                            document.querySelector('.file-name').value = docData.thumbnailUrl;
+                                document.querySelector('#siteName').value = docData.title;
+                                document.querySelector('#siteDescription').value = docData.description;
+                                document.querySelector('#siteLink').value = docData.link;
+                                document.querySelector('.file-name').value = docData.thumbnailUrl;
 
-                            document.querySelectorAll('#writeModifyBtn').forEach((el) => {
-                                el.addEventListener('click', (e) => { // 포트폴리오 사이트 글 수정
-                                    if (isSuperAdmin) {
-                                        let dataUpdateSave = {
-                                            categories: siteCategoriesData, // 분류
-                                            type: siteTypeData, // 유형
-                                            title: siteName.value, // 이름
-                                            description: siteDescription.value, // 설명
-                                            link: siteLink.value, // 주소
-                                            thumbnailUrl: (siteThumbnailUrl !== '') ? siteThumbnailUrl : document.querySelector('.file-name').value, // 썸네일 이미지 주소
-                                        };
+                                document.querySelectorAll('#writeModifyBtn').forEach((el) => {
+                                    el.addEventListener('click', (e) => { // 포트폴리오 사이트 글 수정
+                                        if (isSuperAdmin) {
+                                            let dataUpdateSave = {
+                                                categories: siteCategoriesData, // 분류
+                                                type: siteTypeData, // 유형
+                                                title: siteName.value, // 이름
+                                                description: siteDescription.value, // 설명
+                                                link: siteLink.value, // 주소
+                                                thumbnailUrl: (siteThumbnailUrl !== '') ? siteThumbnailUrl : document.querySelector('.file-name').value, // 썸네일 이미지 주소
+                                            };
 
-                                        dbFireStore().collection('site').doc(e.target.dataset.id).update(dataUpdateSave).then(() => {
-                                            windowPopup('게시물이 수정되었습니다.');
+                                            dbFireStore().collection('site').doc(e.target.dataset.id).update(dataUpdateSave).then(() => {
+                                                windowPopup('게시물이 수정되었습니다.');
 
-                                            document.querySelector('#windowPopupOk').addEventListener('click', () => {
-                                                reload();
+                                                document.querySelector('#windowPopupOk').addEventListener('click', () => {
+                                                    reload();
+                                                });
+                                            }).catch((error) => {
+                                                windowPopup('게시물 삭제 중 오류가 발생했습니다, 잠시 후 다시 시도해주세요.<br>' + error.message);
                                             });
-                                        }).catch((error) => {
-                                            windowPopup('게시물 삭제 중 오류가 발생했습니다, 잠시 후 다시 시도해주세요.<br>' + error.message);
-                                        });
-                                    } else {
-                                        windowPopup('권한이 없습니다.<br>시스템 관리자에게 문의바랍니다.');
-                                    }
+                                        } else {
+                                            windowPopup('권한이 없습니다.<br>시스템 관리자에게 문의바랍니다.');
+                                        }
+                                    });
                                 });
-                            });
-                        } else {
-                            windowPopup('회원이 아니시라면 회원가입 후 이용 해주세요.');
-                        }
+                            } else {
+                                windowPopup('회원이 아니시라면 회원가입 후 이용 해주세요.');
+                            }
+                        });
+                    });
+
+                    /**
+                     * portfolio sites write delete
+                     */
+                    document.querySelectorAll('#deleteBtn').forEach((el) => { // 삭제
+                        el.addEventListener('click', () => {
+                            if (isUser) {
+                                windowPopup('"' + docData.title + '" 게시물을 삭제하시겠습니까?<br>한번 삭제를하면 복구가 불가능합니다.', '<button id="windowPopupCancel" class="bg-danger" type="button">취소</button>');
+                                document.querySelector('#windowPopupOk').id = 'writeDeleteBtn';
+                                document.querySelector('#writeDeleteBtn').dataset.id = el.getAttribute('data-id');
+                                document.querySelectorAll('#writeDeleteBtn').forEach((el) => {
+                                    el.addEventListener('click', (e) => { // 포트폴리오 사이트 글 삭제
+                                        el.closest('#popupBg').remove();
+
+                                        if (isSuperAdmin) {
+                                            dbFireStore().collection('site').doc(e.target.dataset.id).delete().then(() => {
+                                                windowPopup('게시물이 삭제되었습니다.');
+
+                                                document.querySelector('#windowPopupOk').addEventListener('click', () => {
+                                                    reload();
+                                                });
+                                            }).catch((error) => {
+                                                windowPopup('게시물 삭제 중 오류가 발생했습니다, 잠시 후 다시 시도해주세요.<br>' + error.message);
+                                            });
+                                        } else {
+                                            windowPopup('권한이 없습니다.<br>시스템 관리자에게 문의바랍니다.');
+                                        }
+                                    });
+                                });
+                            } else {
+                                windowPopup('회원이 아니시라면 회원가입 후 이용 해주세요.');
+                            }
+                        });
                     });
                 });
 
-                /**
-                 * portfolio sites write delete
-                 */
-                document.querySelectorAll('#deleteBtn').forEach((el) => { // 삭제
-                    el.addEventListener('click', () => {
-                        if (isUser) {
-                            windowPopup('"' + docData.title + '" 게시물을 삭제하시겠습니까?<br>한번 삭제를하면 복구가 불가능합니다.', '<button id="windowPopupCancel" class="bg-danger" type="button">취소</button>');
-                            document.querySelector('#windowPopupOk').id = 'writeDeleteBtn';
-                            document.querySelector('#writeDeleteBtn').dataset.id = el.getAttribute('data-id');
-                            document.querySelectorAll('#writeDeleteBtn').forEach((el) => {
-                                el.addEventListener('click', (e) => { // 포트폴리오 사이트 글 삭제
-                                    el.closest('#popupBg').remove();
-
-                                    if (isSuperAdmin) {
-                                        dbFireStore().collection('site').doc(e.target.dataset.id).delete().then(() => {
-                                            windowPopup('게시물이 삭제되었습니다.');
-
-                                            document.querySelector('#windowPopupOk').addEventListener('click', () => {
-                                                reload();
-                                            });
-                                        }).catch((error) => {
-                                            windowPopup('게시물 삭제 중 오류가 발생했습니다, 잠시 후 다시 시도해주세요.<br>' + error.message);
-                                        });
-                                    } else {
-                                        windowPopup('권한이 없습니다.<br>시스템 관리자에게 문의바랍니다.');
-                                    }
-                                });
-                            });
-                        } else {
-                            windowPopup('회원이 아니시라면 회원가입 후 이용 해주세요.');
-                        }
-                    });
+                // 상단에 siteThumbnailTempleat 변수에 정의한 html의 site-thumbnail-view-'+doc.id' 매치하여 이벤트 실행
+                docID.addEventListener('mouseleave', () => {
+                    document.querySelector('.site-thumbnail-view-'+doc.id).remove();
                 });
-            });
-
-            // 상단에 siteThumbnailTempleat 변수에 정의한 html의 site-thumbnail-view-'+doc.id' 매치하여 이벤트 실행
-            docID.addEventListener('mouseleave', () => {
-                document.querySelector('.site-thumbnail-view-'+doc.id).remove();
-            });
-        }, 500);
+            }, 500);
+        });
     });
-});
+}
+dkqkqkac();
+
 
 function signUp(self) {
     self.closest('.sign-auth-wrap').classList.toggle('switch-mode');
