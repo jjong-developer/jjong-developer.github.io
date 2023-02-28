@@ -9,7 +9,7 @@ const dbStorage = firebase.storage // 저장 공간
 const dbStorageRef = dbStorage().ref()
 const googleProvider = new dbAuth.GoogleAuthProvider() // 구글 간편 로그인 (https://console.cloud.google.com/ 개발자 사이트 등록)
 const facebookProvider = new dbAuth.FacebookAuthProvider() // 페이스북 간편 로그인 (https://developers.facebook.com/ 개발자 사이트 등록)
-const githubProvider = new dbAuth.GithubAuthProvider() // 깃허브 간편 로그인 (https://github.com/settings/ 개발자 사이트 등록)
+// const githubProvider = new dbAuth.GithubAuthProvider() // 깃허브 간편 로그인 (https://github.com/settings/ 개발자 사이트 등록)
 
 /**
  * global variable
@@ -181,37 +181,41 @@ const fileChange = () => { // 첨부파일 선택 함수
     });
 }
 
+let qlalsdw;
+let qlalsdw2;
 const siteCategoriesSelected = () => { // 포트폴리오 사이트 분류 선택
-    let siteCategories = document.querySelectorAll('#siteCategories');
+    let siteCategories = document.querySelector('#siteCategories');
 
-    siteCategories.forEach((el, i) => {
-        el.addEventListener('change', () => {
-            let categoriesSelectValue = el.options[el.selectedIndex].value;
+    siteCategories.addEventListener('change', (e) => {
+        let categoriesSelectValue = siteCategories.options[siteCategories.selectedIndex].value;
+        let siteCategoriesId = document.getElementById(e.target.id);
 
-            // siteCategories.forEach((el) => {
-            //     el.options[i].removeAttribute('selected');
-            // });
-            // siteCategories[i].options[el.selectedIndex].setAttribute('selected', 'selected');
+        for (let i = 0; i < siteCategoriesId.length; i += 1) {
+            siteCategoriesId[i].removeAttribute('selected');
+        }
+        siteCategoriesId[siteCategoriesId.selectedIndex].setAttribute('selected', 'selected');
 
-            siteCategoriesData = categoriesSelectValue
-        });
+        qlalsdw = Boolean(siteCategoriesId[siteCategoriesId.selectedIndex].getAttribute('selected'));
+
+        siteCategoriesData = categoriesSelectValue
     });
 }
 
 const siteTypeSelected = () => { // 포트폴리오 사이트 유형 선택
-    let siteType = document.querySelectorAll('#siteType');
+    let siteType = document.querySelector('#siteType');
 
-    siteType.forEach((el, i) => {
-        el.addEventListener('change', () => {
-            let typeSelectValue = el.options[el.selectedIndex].value;
+    siteType.addEventListener('change', (e) => {
+        let typeSelectValue = siteType.options[siteType.selectedIndex].value;
+        let siteTypeId = document.getElementById(e.target.id);
 
-            // siteType.forEach((el) => {
-            //     el.options[i].removeAttribute('selected');
-            // });
-            // siteType[i].options[el.selectedIndex].setAttribute('selected', 'selected');
+        for (let i = 0; i < siteTypeId.length; i += 1) {
+            siteTypeId[i].removeAttribute('selected');
+        }
+        siteTypeId[siteTypeId.selectedIndex].setAttribute('selected', 'selected');
 
-            siteTypeData = typeSelectValue
-        });
+        qlalsdw2 = Boolean(siteTypeId[siteTypeId.selectedIndex].getAttribute('selected'));
+
+        siteTypeData = typeSelectValue
     });
 }
 
@@ -415,6 +419,8 @@ dbAuth().onAuthStateChanged((user) => { // 로그인 상태 여/부
                 if (isSuperAdmin) {
                     if (siteCategoriesData !== '' && siteTypeData !== '' && siteName.value !== '' && siteDescription.value !== '' && siteLink.value !== '' && fileUpload !== undefined) {
                         let dataSave = {
+                            isCategories: qlalsdw, // 분류 선택 여부
+                            isType: qlalsdw2, // 유형 선택 여부
                             categories: siteCategoriesData, // 분류
                             type: siteTypeData, // 유형
                             title: siteName.value, // 이름
@@ -468,10 +474,6 @@ dbAuth().onAuthStateChanged((user) => { // 로그인 상태 여/부
                             '<span>facebook</span>' +
                         '</button>' +
                         '<button class="sns-sign-in-info" type="button" onclick="signInUp(this);">' +
-                            '<img src="./images/sns/github_icon.png" title="깃허브 이메일로 로그인" alt="깃허브 이메일로 로그인" />' +
-                            '<span>github</span>' +
-                        '</button>' +
-                        '<button class="sns-sign-in-info" type="button" onclick="signInUp(this);">' +
                             '<img src="./images/sns/kakao_icon.png" title="카카오 이메일로 로그인" alt="카카오 이메일로 로그인" />' +
                             '<span>kakao</span>' +
                         '</button>' +
@@ -503,7 +505,7 @@ dbAuth().onAuthStateChanged((user) => { // 로그인 상태 여/부
 });
 
 /**
- * portfolio sites list
+ * portfolio sites list view
  */
 let siteNoListTempleat = '' +
     '<div>게시물이 없습니다.</div>';
@@ -514,48 +516,56 @@ dbFireStore().collection('site').where('categories', '==', '쇼핑몰').get().th
         document.querySelector('#shoppingMallList').innerHTML = siteNoListTempleat;
     }
 
-    console.log(result.docs);
+    result.forEach((doc) => {
+        let docData = doc.data();
 
-    dbFireStore().collection('site').where('categories', '==', '쇼핑몰').limit(4).get().then((resultTest) => {
-        resultTest.forEach((doc) => {
-            let docData = doc.data();
-
-            const siteListTempleat = '' +
-                '<div id="'+ doc.id +'" class="site-thumbnail-box">' +
+        const siteListTempleat = '' +
+            '<div id="'+ doc.id +'" class="site-thumbnail-box">' +
                 '<img src="' + docData.thumbnailUrl + '" title="' + docData.title + '" />' +
-                '</div>';
+            '</div>';
 
-            const moreViewTempleat = '' +
-                '<button id="moreBtn" class="btn-type-2" type="button">' +
-                'MORE' +
-                '</button>';
-
-            document.querySelector('#shoppingMallList').innerHTML += siteListTempleat;
-            document.querySelector('.more-view').innerHTML = moreViewTempleat;
-
-            document.querySelector('#moreBtn').addEventListener('click', () => { // 게시물 더 불러오기
-                let lastVisible = resultTest.docs[resultTest.docs.length - 1];
-                console.log(lastVisible);
-
-                dbFireStore().collection('site').where('categories', '==', '쇼핑몰').startAfter(lastVisible).limit(4).get().then((resultTest22) => {
-                    console.log(result.docs.length - 4 - resultTest22.docs.length);
-
-                    resultTest22.forEach((doc) => {
-                        const siteListTempleataaaa = '' +
-                            '<div id="'+ doc.id +'" class="site-thumbnail-box">' +
-                            '<img src="' + docData.thumbnailUrl + '" />' +
-                            '</div>';
-
-                        document.querySelector('#shoppingMallList').innerHTML += siteListTempleataaaa;
-                        // dkqkqkac();
-                    });
-                });
-            });
-        });
+        document.querySelector('#shoppingMallList').innerHTML += siteListTempleat;
     });
+
+    // dbFireStore().collection('site').where('categories', '==', '쇼핑몰').limit(4).get().then((resultTest) => {
+    //     resultTest.forEach((doc) => {
+    //         let docData = doc.data();
+    //
+    //         const siteListTempleat = '' +
+    //             '<div id="'+ doc.id +'" class="site-thumbnail-box">' +
+    //                 '<img src="' + docData.thumbnailUrl + '" title="' + docData.title + '" />' +
+    //             '</div>';
+    //
+    //         const moreViewTempleat = '' +
+    //             '<button id="moreBtn" class="btn-type-2" type="button">' +
+    //                 'MORE' +
+    //             '</button>';
+    //
+    //         document.querySelector('#shoppingMallList').innerHTML += siteListTempleat;
+    //         document.querySelector('.more-view').innerHTML = moreViewTempleat;
+    //
+    //         document.querySelector('#moreBtn').addEventListener('click', () => { // 게시물 더 불러오기
+    //             let lastVisible = resultTest.docs[resultTest.docs.length - 1];
+    //             console.log(lastVisible);
+    //
+    //             dbFireStore().collection('site').where('categories', '==', '쇼핑몰').startAfter(lastVisible).limit(4).get().then((resultTest22) => {
+    //                 console.log(result.docs.length - 4 - resultTest22.docs.length);
+    //
+    //                 resultTest22.forEach((doc) => {
+    //                     const siteListTempleataaaa = '' +
+    //                         '<div id="'+ doc.id +'" class="site-thumbnail-box">' +
+    //                             '<img src="' + docData.thumbnailUrl + '" />' +
+    //                         '</div>';
+    //
+    //                     document.querySelector('#shoppingMallList').innerHTML += siteListTempleataaaa;
+    //                 });
+    //             });
+    //         });
+    //     });
+    // });
 });
 
-dbFireStore().collection('site').where('categories', '==', '호텔/팬션').limit(2).get().then((result) => {
+dbFireStore().collection('site').where('categories', '==', '호텔/팬션').get().then((result) => {
     if (result.docs.length === 0) {
         document.querySelector('#hotelList').innerHTML = siteNoListTempleat;
     }
@@ -565,14 +575,14 @@ dbFireStore().collection('site').where('categories', '==', '호텔/팬션').limi
 
         const siteListTempleat = '' +
             '<div id="'+ doc.id +'" class="site-thumbnail-box">' +
-            '<img src="' + docData.thumbnailUrl + '" title="' + docData.title + '" />' +
+                '<img src="' + docData.thumbnailUrl + '" title="' + docData.title + '" />' +
             '</div>';
 
         document.querySelector('#hotelList').innerHTML += siteListTempleat;
     });
 });
 
-dbFireStore().collection('site').where('categories', '==', '교육/IT솔루션 서비스').limit(2).get().then((result) => {
+dbFireStore().collection('site').where('categories', '==', '교육/IT솔루션 서비스').get().then((result) => {
     if (result.docs.length === 0) {
         document.querySelector('#solutionServiceList').innerHTML = siteNoListTempleat;
     }
@@ -582,14 +592,14 @@ dbFireStore().collection('site').where('categories', '==', '교육/IT솔루션 �
 
         const siteListTempleat = '' +
             '<div id="'+ doc.id +'" class="site-thumbnail-box">' +
-            '<img src="' + docData.thumbnailUrl + '" title="' + docData.title + '" />' +
+                '<img src="' + docData.thumbnailUrl + '" title="' + docData.title + '" />' +
             '</div>';
 
         document.querySelector('#solutionServiceList').innerHTML += siteListTempleat;
     });
 });
 
-dbFireStore().collection('site').where('categories', '==', '제조장비 반도체산업').limit(2).get().then((result) => {
+dbFireStore().collection('site').where('categories', '==', '제조장비 반도체산업').get().then((result) => {
     if (result.docs.length === 0) {
         document.querySelector('#semiconductorList').innerHTML = siteNoListTempleat;
     }
@@ -599,14 +609,14 @@ dbFireStore().collection('site').where('categories', '==', '제조장비 반도�
 
         const siteListTempleat = '' +
             '<div id="'+ doc.id +'" class="site-thumbnail-box">' +
-            '<img src="' + docData.thumbnailUrl + '" title="' + docData.title + '" />' +
+                '<img src="' + docData.thumbnailUrl + '" title="' + docData.title + '" />' +
             '</div>';
 
         document.querySelector('#semiconductorList').innerHTML += siteListTempleat;
     });
 });
 
-dbFireStore().collection('site').where('categories', '==', '기타').limit(2).get().then((result) => {
+dbFireStore().collection('site').where('categories', '==', '기타').get().then((result) => {
     if (result.docs.length === 0) {
         document.querySelector('#etcList').innerHTML = siteNoListTempleat;
     }
@@ -616,15 +626,15 @@ dbFireStore().collection('site').where('categories', '==', '기타').limit(2).ge
 
         const siteListTempleat = '' +
             '<div id="'+ doc.id +'" class="site-thumbnail-box">' +
-            '<img src="' + docData.thumbnailUrl + '" title="' + docData.title + '" />' +
+                '<img src="' + docData.thumbnailUrl + '" title="' + docData.title + '" />' +
             '</div>';
 
         document.querySelector('#etcList').innerHTML += siteListTempleat;
     });
 });
 
-let dkqkqkac = () => {
-    dbFireStore().collection('site').get().then((snapshot) => {
+let siteListAll = () => {
+    dbFireStore().collection('site').get().then((snapshot) => { // 등록한 포트폴리오 사이트 전체 불러오기
         snapshot.forEach((doc) => {
             let docData = doc.data();
 
@@ -632,17 +642,17 @@ let dkqkqkac = () => {
             setTimeout(() => {
                 const siteThumbnailTempleat = '' +
                     '<div class="site-thumbnail-view site-thumbnail-view-'+ doc.id +'">' +
-                    '<div class="btn-wrap">' +
-                    '<button id="modifyBtn" class="btn-type-1 site-thumbnail-view-btn" data-id="'+ doc.id +'" type="button">수정</button>' +
-                    '<button id="deleteBtn" class="btn-type-1 bg-danger site-thumbnail-view-btn" data-id="'+ doc.id +'" type="button">삭제</button>' +
-                    '</div>' +
-                    '<span class="site-thumbnail-view-type">' + docData.type + '</span>' +
-                    '<h3 class="site-thumbnail-view-title">' + docData.title + '</h3>' +
-                    '<p class="site-thumbnail-view-description">' + docData.description + '</p>' +
-                    '<a class="site-thumbnail-view-link" href="' + docData.link + '" target="_blank">' +
-                    'view more' +
-                    '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="none" d="M0 0h24v24H0z"/><path d="M13.172 12l-4.95-4.95 1.414-1.414L16 12l-6.364 6.364-1.414-1.414z" fill="rgba(255,255,255,1)"/></svg>' +
-                    '</a>' +
+                        '<div class="btn-wrap">' +
+                            '<button id="modifyBtn" class="btn-type-1 site-thumbnail-view-btn" data-id="'+ doc.id +'" type="button">수정</button>' +
+                            '<button id="deleteBtn" class="btn-type-1 bg-danger site-thumbnail-view-btn" data-id="'+ doc.id +'" type="button">삭제</button>' +
+                        '</div>' +
+                        '<span class="site-thumbnail-view-type">' + docData.type + '</span>' +
+                        '<h3 class="site-thumbnail-view-title">' + docData.title + '</h3>' +
+                        '<p class="site-thumbnail-view-description">' + docData.description + '</p>' +
+                        '<a class="site-thumbnail-view-link" href="' + docData.link + '" target="_blank">' +
+                            'view more' +
+                            '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="none" d="M0 0h24v24H0z"/><path d="M13.172 12l-4.95-4.95 1.414-1.414L16 12l-6.364 6.364-1.414-1.414z" fill="rgba(255,255,255,1)"/></svg>' +
+                        '</a>' +
                     '</div>';
 
                 // querySelector는 인자값으로 숫자를 받지못해서 id를 지정했을때 고유의 값이라 숫자를 인식 못하여 getElementById 함수로 사용함
@@ -665,7 +675,7 @@ let dkqkqkac = () => {
                                 fileChange();
 
                                 document.querySelector('#writeBtn').id = 'writeModifyBtn';
-                                document.querySelector('.modal-title h2').textContent = '프로젝트를 수정 해보세요 :)';
+                                document.querySelector('.modal-title h2').textContent = '등록한 프로젝트를 수정 해보세요 :)';
                                 document.querySelector('#writeModifyBtn').textContent = '수정하기';
                                 document.querySelector('#writeModifyBtn').dataset.id = el.getAttribute('data-id');
 
@@ -678,6 +688,8 @@ let dkqkqkac = () => {
                                     el.addEventListener('click', (e) => { // 포트폴리오 사이트 글 수정
                                         if (isSuperAdmin) {
                                             let dataUpdateSave = {
+                                                isCategories: qlalsdw, // 분류 선택 여부
+                                                isType: qlalsdw2, // 유형 선택 여부
                                                 categories: siteCategoriesData, // 분류
                                                 type: siteTypeData, // 유형
                                                 title: siteName.value, // 이름
@@ -749,8 +761,7 @@ let dkqkqkac = () => {
         });
     });
 }
-dkqkqkac();
-
+siteListAll();
 
 function signUp(self) {
     self.closest('.sign-auth-wrap').classList.toggle('switch-mode');
@@ -880,13 +891,6 @@ function signInUp(self) {
         // });
     } else if (self.textContent === 'facebook') {
         dbAuth().signInWithRedirect(facebookProvider);
-    } else if (self.textContent === 'github') {
-        dbAuth().signInWithRedirect(githubProvider);
-        // dbAuth().getRedirectResult().then((result) => { // 인증 절차 진행 전 페이지가 로드될때 OAuth 토큰 정보를 가져와서 볼 수 있음
-        //     alert(JSON.stringify(githubProvider));
-        // }).catch((error) => {
-        //     windowPopup('잠시 후 다시 시도해주세요.'+error.message);
-        // });
     } else if (self.textContent === 'kakao') {
         windowPopup('서비스 개발중입니다.');
     } else if (self.textContent === '가입하기') {
@@ -965,17 +969,17 @@ function passwordReset() {
  * portfolio sites tab menu
  */
 tabMenuCategories.forEach((el, i) => {
-    el.addEventListener('click', () =>  {
-       tabMenuCategories.forEach((el) => {
+    el.addEventListener('click', (e) =>  {
+        tabMenuCategories.forEach((el) => {
            el.classList.remove('active');
-       });
+        });
 
-       tabMenuContent.forEach((el) => {
-           el.classList.remove('active');
-       });
+        tabMenuContent.forEach((el) => {
+            el.classList.remove('active');
+        });
 
-       tabMenuCategories[i].classList.add('active');
-       tabMenuContent[i].classList.add('active');
+        tabMenuCategories[i].classList.add('active');
+        tabMenuContent[i].classList.add('active');
    });
 });
 
