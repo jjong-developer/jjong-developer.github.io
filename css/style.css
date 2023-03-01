@@ -62,21 +62,21 @@ select {
 }
 select option {background: #1E1E1E;}
 select::-ms-expand {display: none;}
-button, input, textarea {border: none; outline: 0; background: none; padding: 0; color: #ffffff; font-size: 16px;}
+button, input, textarea {font-family: 'Noto Sans KR', sans-serif; border: none; outline: 0; background: none; padding: 0; color: #ffffff; font-size: 14px;}
 button {cursor: pointer;}
 input {width: 100%; height: 50px; border: 1px solid #666666; padding: 0 15px 0 15px; margin: 0 0 15px 0;}
-input:focus {border: 1px solid #3e54d3;}
-textarea {width: 100%; resize: none; margin: 0 0 15px 0; font-size: 14px;}
-textarea:focus {border: 1px solid #3e54d3;}
-select:focus {border: 1px solid #3e54d3;}
-input:-webkit-autofill,
-input:-webkit-autofill:hover,
-input:-webkit-autofill:focus,
-input:-webkit-autofill:active {
+input::focus {border: 1px solid #3e54d3;}
+input::-webkit-autofill,
+input::-webkit-autofill:hover,
+input::-webkit-autofill:focus,
+input::-webkit-autofill:active {
     transition: background-color 5000s ease-in-out 0s;
     -webkit-transition: background-color 9999s ease-out;
     -webkit-text-fill-color: #fff;
 }
+textarea {font-family: 'Noto Sans KR', sans-serif; width: 100%; resize: none; margin: 0 0 15px 0; font-size: 14px; font-weight: 400 !important;}
+textarea::focus {border: 1px solid #3e54d3;}
+select::focus {border: 1px solid #3e54d3;}
 p {line-height: 1.2; margin:0; font-size: 16px;}
 em {font-style: unset;}
 img {max-width: 100%;}
@@ -185,10 +185,11 @@ img {max-width: 100%;}
     border: 1px solid #666666;
 }
 .file-box .file-name {
-    font-size: 14px;
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
+    font-size: 14px;
+    color: #7f7f7f;
 }
 #modalBg {
     position: fixed;
@@ -311,7 +312,6 @@ img {max-width: 100%;}
     height: 200px;
     border: 1px solid #666666;
     padding: 15px;
-    font-weight: bold;
 }
 .modal-select-box-wrap {
     display: flex;
@@ -684,6 +684,7 @@ img {max-width: 100%;}
     padding: 25px;
 }
 .site-thumbnail-view .site-thumbnail-view-type {
+    font-family: 'Roboto', sans-serif;
     font-size: 18px;
     color: #666666;
 }
@@ -700,6 +701,7 @@ img {max-width: 100%;}
     font-size: 16px;
 }
 .site-thumbnail-view .site-thumbnail-view-link {
+    font-family: 'Roboto', sans-serif;
     position: absolute;
     bottom: 25px;
     right: 25px;
@@ -710,6 +712,13 @@ img {max-width: 100%;}
     padding: 10px 15px 10px 15px;
     color: #ffffff;
     text-transform: uppercase;
+    transition: 0.3s;
+    font-weight: 600;
+}
+.site-thumbnail-view .site-thumbnail-view-link:hover {
+    border: 1px solid #000000;
+    background: #ffffff;
+    color: #000000;
 }
 .site-thumbnail-view .site-thumbnail-view-btn {
     padding: 7px 15px 7px 15px;

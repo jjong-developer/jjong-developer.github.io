@@ -26,6 +26,7 @@ const tabMenuContent = document.querySelectorAll('.tab-menu-content');
 let isUser; // 로그인 여/부 상태값을 받기 위함 -> html 파일내에서 생성한 태그는 사용안하는 용도이고 script내에서 동적으로 추가한 html만 사용하기 위함
 let superAdmin = ['jongwook2.kim@gmail.com']; // 관리자 권한 이메일 설정
 let isSuperAdmin, isModalBg = false;
+let isCategories, isType;
 let fileUpload;
 let siteCategoriesData, siteTypeData, siteName, siteDescription, siteLink, siteThumbnailUrl = '';
 
@@ -131,7 +132,7 @@ const portfolioSite = () => { // 포트폴리오 사이트 글 등록, 수정 �
                     '<option value="" selected="selected" disabled>분류 선택</option>' +
                     '<option value="쇼핑몰">쇼핑몰</option>' +
                     '<option value="호텔/팬션">호텔/팬션</option>' +
-                    '<option value="교육/IT솔루션 서비스">교육/IT솔루션 서비스</option>' +
+                    '<option value="교육/IT솔루션">교육/IT솔루션</option>' +
                     '<option value="제조장비 반도체산업">제조장비 반도체산업</option>' +
                     '<option value="기타">기타</option>' +
                 '</select>' +
@@ -167,6 +168,7 @@ const fileChange = () => { // 첨부파일 선택 함수
             let fileTarget = e.target.files[0]; // 파일 추출
             let fileName = e.target.files[0].name; // 파일명 추출
 
+            fileNameTarget.style.color = '#ffffff';
             fileNameTarget.value = fileName; // 변경할때마다 파일명을 input에 insert
             fileUpload = dbStorageRef.child('images/portfolio/' + fileName).put(fileTarget);
 
@@ -181,8 +183,6 @@ const fileChange = () => { // 첨부파일 선택 함수
     });
 }
 
-let qlalsdw;
-let qlalsdw2;
 const siteCategoriesSelected = () => { // 포트폴리오 사이트 분류 선택
     let siteCategories = document.querySelector('#siteCategories');
 
@@ -195,7 +195,7 @@ const siteCategoriesSelected = () => { // 포트폴리오 사이트 분류 선�
         }
         siteCategoriesId[siteCategoriesId.selectedIndex].setAttribute('selected', 'selected');
 
-        qlalsdw = Boolean(siteCategoriesId[siteCategoriesId.selectedIndex].getAttribute('selected'));
+        isCategories = Boolean(siteCategoriesId[siteCategoriesId.selectedIndex].getAttribute('selected'));
 
         siteCategoriesData = categoriesSelectValue
     });
@@ -213,7 +213,7 @@ const siteTypeSelected = () => { // 포트폴리오 사이트 유형 선택
         }
         siteTypeId[siteTypeId.selectedIndex].setAttribute('selected', 'selected');
 
-        qlalsdw2 = Boolean(siteTypeId[siteTypeId.selectedIndex].getAttribute('selected'));
+        isType = Boolean(siteTypeId[siteTypeId.selectedIndex].getAttribute('selected'));
 
         siteTypeData = typeSelectValue
     });
@@ -418,11 +418,19 @@ dbAuth().onAuthStateChanged((user) => { // 로그인 상태 여/부
             document.querySelector('#writeBtn').addEventListener('click', () => { // 포트폴리오 사이트 글 등록하기
                 if (isSuperAdmin) {
                     if (siteCategoriesData !== '' && siteTypeData !== '' && siteName.value !== '' && siteDescription.value !== '' && siteLink.value !== '' && fileUpload !== undefined) {
+                        let categoriesJSON = {
+                            categories: siteCategoriesData,
+                            selected: isCategories,
+                        };
+
+                        let typeJSON = {
+                            type: siteTypeData,
+                            selected: isType,
+                        };
+
                         let dataSave = {
-                            isCategories: qlalsdw, // 분류 선택 여부
-                            isType: qlalsdw2, // 유형 선택 여부
-                            categories: siteCategoriesData, // 분류
-                            type: siteTypeData, // 유형
+                            categoriesInfo: categoriesJSON, // 분류 & 선택 여부
+                            typeInfo: typeJSON, // 유형 & 선택 여부
                             title: siteName.value, // 이름
                             description: siteDescription.value, // 설명
                             link: siteLink.value, // 주소
@@ -510,7 +518,7 @@ dbAuth().onAuthStateChanged((user) => { // 로그인 상태 여/부
 let siteNoListTempleat = '' +
     '<div>게시물이 없습니다.</div>';
 
-dbFireStore().collection('site').where('categories', '==', '쇼핑몰').get().then((result) => {
+dbFireStore().collection('site').where('categoriesInfo.categories', '==', '쇼핑몰').get().then((result) => {
     // 게시물이 총 9개 있음
     if (result.docs.length === 0) {
         document.querySelector('#shoppingMallList').innerHTML = siteNoListTempleat;
@@ -527,7 +535,7 @@ dbFireStore().collection('site').where('categories', '==', '쇼핑몰').get().th
         document.querySelector('#shoppingMallList').innerHTML += siteListTempleat;
     });
 
-    // dbFireStore().collection('site').where('categories', '==', '쇼핑몰').limit(4).get().then((resultTest) => {
+    // dbFireStore().collection('site').where('categoriesInfo.categories', '==', '쇼핑몰').limit(4).get().then((resultTest) => {
     //     resultTest.forEach((doc) => {
     //         let docData = doc.data();
     //
@@ -548,7 +556,7 @@ dbFireStore().collection('site').where('categories', '==', '쇼핑몰').get().th
     //             let lastVisible = resultTest.docs[resultTest.docs.length - 1];
     //             console.log(lastVisible);
     //
-    //             dbFireStore().collection('site').where('categories', '==', '쇼핑몰').startAfter(lastVisible).limit(4).get().then((resultTest22) => {
+    //             dbFireStore().collection('site').where('categoriesInfo.categories', '==', '쇼핑몰').startAfter(lastVisible).limit(4).get().then((resultTest22) => {
     //                 console.log(result.docs.length - 4 - resultTest22.docs.length);
     //
     //                 resultTest22.forEach((doc) => {
@@ -565,7 +573,7 @@ dbFireStore().collection('site').where('categories', '==', '쇼핑몰').get().th
     // });
 });
 
-dbFireStore().collection('site').where('categories', '==', '호텔/팬션').get().then((result) => {
+dbFireStore().collection('site').where('categoriesInfo.categories', '==', '호텔/팬션').get().then((result) => {
     if (result.docs.length === 0) {
         document.querySelector('#hotelList').innerHTML = siteNoListTempleat;
     }
@@ -582,7 +590,7 @@ dbFireStore().collection('site').where('categories', '==', '호텔/팬션').get(
     });
 });
 
-dbFireStore().collection('site').where('categories', '==', '교육/IT솔루션 서비스').get().then((result) => {
+dbFireStore().collection('site').where('categoriesInfo.categories', '==', '교육/IT솔루션').get().then((result) => {
     if (result.docs.length === 0) {
         document.querySelector('#solutionServiceList').innerHTML = siteNoListTempleat;
     }
@@ -599,7 +607,7 @@ dbFireStore().collection('site').where('categories', '==', '교육/IT솔루션 �
     });
 });
 
-dbFireStore().collection('site').where('categories', '==', '제조장비 반도체산업').get().then((result) => {
+dbFireStore().collection('site').where('categoriesInfo.categories', '==', '제조장비 반도체산업').get().then((result) => {
     if (result.docs.length === 0) {
         document.querySelector('#semiconductorList').innerHTML = siteNoListTempleat;
     }
@@ -616,7 +624,7 @@ dbFireStore().collection('site').where('categories', '==', '제조장비 반도�
     });
 });
 
-dbFireStore().collection('site').where('categories', '==', '기타').get().then((result) => {
+dbFireStore().collection('site').where('categoriesInfo.categories', '==', '기타').get().then((result) => {
     if (result.docs.length === 0) {
         document.querySelector('#etcList').innerHTML = siteNoListTempleat;
     }
@@ -638,6 +646,8 @@ let siteListAll = () => {
         snapshot.forEach((doc) => {
             let docData = doc.data();
 
+            console.log(docData);
+
             // settimeout 임시로.. 추후에 변경해야함
             setTimeout(() => {
                 const siteThumbnailTempleat = '' +
@@ -646,7 +656,7 @@ let siteListAll = () => {
                             '<button id="modifyBtn" class="btn-type-1 site-thumbnail-view-btn" data-id="'+ doc.id +'" type="button">수정</button>' +
                             '<button id="deleteBtn" class="btn-type-1 bg-danger site-thumbnail-view-btn" data-id="'+ doc.id +'" type="button">삭제</button>' +
                         '</div>' +
-                        '<span class="site-thumbnail-view-type">' + docData.type + '</span>' +
+                        '<span class="site-thumbnail-view-type">' + docData.typeInfo['type'] + '</span>' +
                         '<h3 class="site-thumbnail-view-title">' + docData.title + '</h3>' +
                         '<p class="site-thumbnail-view-description">' + docData.description + '</p>' +
                         '<a class="site-thumbnail-view-link" href="' + docData.link + '" target="_blank">' +
@@ -666,7 +676,7 @@ let siteListAll = () => {
                     /**
                      * portfolio sites write update
                      */
-                    document.querySelectorAll('#modifyBtn').forEach((el) => { // 수정
+                    document.querySelectorAll('#modifyBtn').forEach((el) => {
                         el.addEventListener('click', () => {
                             if (isUser) {
                                 portfolioSite();
@@ -684,14 +694,52 @@ let siteListAll = () => {
                                 document.querySelector('#siteLink').value = docData.link;
                                 document.querySelector('.file-name').value = docData.thumbnailUrl;
 
+                                if (docData.categoriesInfo['selected'] === true) {
+                                    let siteCategoriesDefalut = document.querySelector('#siteCategories');
+
+                                    for (let i = 0; i < siteCategoriesDefalut.length; i += 1) {
+                                        // console.log(siteCategoriesDefalut.options[i]);
+                                        siteCategoriesDefalut[i].removeAttribute('selected');
+
+                                        for (let j = 0; j < siteCategoriesDefalut.length; j += 1) {
+                                            if (siteCategoriesDefalut.options[j].value === docData.categoriesInfo['categories']) {
+                                                siteCategoriesDefalut.options[j].setAttribute('selected', 'selected');
+                                            }
+                                        }
+                                    }
+                                }
+
+                                if (docData.typeInfo['selected'] === true) {
+                                    let siteTypeDefalut = document.querySelector('#siteType');
+
+                                    for (let i = 0; i < siteTypeDefalut.length; i += 1) {
+                                        // console.log(siteTypeDefalut.options[i]);
+                                        siteTypeDefalut[i].removeAttribute('selected');
+
+                                        for (let j = 0; j < siteTypeDefalut.length; j += 1) {
+                                            if (siteTypeDefalut.options[j].value === docData.typeInfo['type']) {
+                                                siteTypeDefalut.options[j].setAttribute('selected', 'selected');
+                                            }
+                                        }
+                                    }
+                                }
+
                                 document.querySelectorAll('#writeModifyBtn').forEach((el) => {
                                     el.addEventListener('click', (e) => { // 포트폴리오 사이트 글 수정
                                         if (isSuperAdmin) {
+                                            let categoriesJSON = {
+                                                categories: siteCategoriesData,
+                                                selected: isCategories,
+                                            };
+
+                                            let typeJSON = {
+                                                type: siteTypeData,
+                                                selected: isType,
+                                            };
+
                                             let dataUpdateSave = {
-                                                isCategories: qlalsdw, // 분류 선택 여부
-                                                isType: qlalsdw2, // 유형 선택 여부
-                                                categories: siteCategoriesData, // 분류
-                                                type: siteTypeData, // 유형
+                                                categoriesInfo: categoriesJSON, // 분류 & 선택 여부
+                                                typeInfo: typeJSON, // 유형 & 선택 여부
                                                 title: siteName.value, // 이름
                                                 description: siteDescription.value, // 설명
                                                 link: siteLink.value, // 주소
