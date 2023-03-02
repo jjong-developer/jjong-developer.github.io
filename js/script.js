@@ -14,6 +14,11 @@ const facebookProvider = new dbAuth.FacebookAuthProvider() // 페이스북 간�
 /**
  * global variable
  */
+const today = new Date();
+const year = today.getFullYear();
+const month = today.getMonth() + 1;
+const day = today.getDate();
+const todayDate = year+'-'+(('00'+month.toString()).slice(-2))+'-'+(('00'+day.toString()).slice(-2));
 const headerSelector = document.querySelector('.header');
 const titleSelector  = document.querySelectorAll('.title');
 const topBtn = document.querySelector('#topBtn');
@@ -127,6 +132,16 @@ const portfolioSite = () => { // 포트폴리오 사이트 글 등록, 수정 �
     modal(
     '프로젝트를 등록 해보세요 :)',
 '<div>' +
+            '<div class="modal-date-box-wrap">' +
+                '<div class="modal-date-box">' +
+                    '<label for="startPeriod">시작 기간: </label>' +
+                    '<input id="startPeriod" type="date" name="startPeriod" max="' + todayDate + '" pattern="\d{4}/\d{2}/\d{2}" />' + // min="0000-00-00"
+                '</div>' +
+                '<div class="modal-date-box">' +
+                    '<label for="endPeriod">종료 기간: </label>' +
+                    '<input id="endPeriod" type="date" name="endPeriod" max="' + todayDate + '" pattern="\d{4}/\d{2}/\d{2}" />' +
+                '</div>' +
+            '</div>' +
             '<div class="modal-select-box-wrap">' +
                 '<select id="siteCategories" class="modal-select-box">' +
                     '<option value="" selected="selected" disabled>분류 선택</option>' +
@@ -142,9 +157,8 @@ const portfolioSite = () => { // 포트폴리오 사이트 글 등록, 수정 �
                     '<option value="WEB/APP">WEB/APP</option>' +
                 '</select>' +
             '</div>' +
-            // '<div>진행 기간 : </div>' +
             '<input id="siteName" type="text" value="" autocomplete="off" placeholder="사이트 이름을(를) 입력해주세요." />' +
-            '<textarea id="siteDescription" class="modal-textarea" placeholder="간략한 설명을(를) 입력해주세요."></textarea>' +
+            '<textarea id="siteDescription" class="modal-textarea" placeholder="간략한 설명을(를) 입력해주세요.&#13;&#10;참여 기여도를 같이 기재해주세요."></textarea>' +
             '<input id="siteLink" type="text" value="" autocomplete="off" placeholder="포트폴리오 주소을(를) 입력해주세요." />' +
             '<div class="file-box">' +
                 '<input class="file-name" value="첨부파일명" disabled>' +
@@ -417,7 +431,7 @@ dbAuth().onAuthStateChanged((user) => { // 로그인 상태 여/부
 
             document.querySelector('#writeBtn').addEventListener('click', () => { // 포트폴리오 사이트 글 등록하기
                 if (isSuperAdmin) {
-                    if (siteCategoriesData !== '' && siteTypeData !== '' && siteName.value !== '' && siteDescription.value !== '' && siteLink.value !== '' && fileUpload !== undefined) {
+                    if (siteCategoriesData !== undefined && siteTypeData !== undefined && siteName.value !== '' && siteDescription.value !== '' && siteLink.value !== '' && fileUpload !== undefined) {
                         let categoriesJSON = {
                             categories: siteCategoriesData,
                             selected: isCategories,
@@ -661,7 +675,7 @@ let siteListAll = () => {
                         '<p class="site-thumbnail-view-description">' + docData.description + '</p>' +
                         '<a class="site-thumbnail-view-link" href="' + docData.link + '" target="_blank">' +
                             'view more' +
-                            '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="none" d="M0 0h24v24H0z"/><path d="M13.172 12l-4.95-4.95 1.414-1.414L16 12l-6.364 6.364-1.414-1.414z" fill="rgba(255,255,255,1)"/></svg>' +
+                            '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="none" d="M0 0h24v24H0z"/><path class="fill" d="M13.172 12l-4.95-4.95 1.414-1.414L16 12l-6.364 6.364-1.414-1.414z" fill="#ffffff"/></svg>' +
                         '</a>' +
                     '</div>';
 
@@ -672,6 +686,23 @@ let siteListAll = () => {
                 // 상단에 siteListTempleat 변수에 정의한 html의 doc.id(문서의 고유id)값을 가져와서 매치하여 이벤트 실행
                 docID.addEventListener('mouseenter', () => {
                     document.getElementById(''+ doc.id +'').insertAdjacentHTML('afterbegin', siteThumbnailTempleat);
+
+                    let siteThumbnailViewLink = document.querySelector('.site-thumbnail-view .site-thumbnail-view-link');
+
+                    siteThumbnailViewLink.addEventListener('mouseenter', (e) => {
+                        let targetViewLink = e.target;
+
+                        targetViewLink.style.backgroundColor = '#ffffff';
+                        targetViewLink.style.color = '#000000';
+                        targetViewLink.children[0].innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="none" d="M0 0h24v24H0z"/><path class="fill" d="M13.172 12l-4.95-4.95 1.414-1.414L16 12l-6.364 6.364-1.414-1.414z" fill="#000000"/></svg>';
+                    });
+                    siteThumbnailViewLink.addEventListener('mouseleave', (e) => {
+                        let targetViewLink = e.target;
+
+                        targetViewLink.style.backgroundColor = 'unset';
+                        targetViewLink.style.color = '#ffffff';
+                        targetViewLink.children[0].innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="none" d="M0 0h24v24H0z"/><path class="fill" d="M13.172 12l-4.95-4.95 1.414-1.414L16 12l-6.364 6.364-1.414-1.414z" fill="#ffffff"/></svg>';
+                    });
 
                     /**
                      * portfolio sites write update
@@ -694,7 +725,7 @@ let siteListAll = () => {
                                 document.querySelector('#siteLink').value = docData.link;
                                 document.querySelector('.file-name').value = docData.thumbnailUrl;
 
-                                if (docData.categoriesInfo['selected'] === true) {
+                                if (docData.categoriesInfo['selected'] === true) { // 분류 선택 후 등록 시 selected 가 true일때 다시 불러오기 위함
                                     let siteCategoriesDefalut = document.querySelector('#siteCategories');
 
                                     for (let i = 0; i < siteCategoriesDefalut.length; i += 1) {
@@ -704,12 +735,14 @@ let siteListAll = () => {
                                         for (let j = 0; j < siteCategoriesDefalut.length; j += 1) {
                                             if (siteCategoriesDefalut.options[j].value === docData.categoriesInfo['categories']) {
                                                 siteCategoriesDefalut.options[j].setAttribute('selected', 'selected');
+                                                siteCategoriesData = siteCategoriesDefalut.options[j].value; // 변경을 안했을때 undefined 이므로 이전의 기존 데이터를 저장
+                                                isCategories = docData.categoriesInfo['selected']; // 변경을 안했을때 undefined 이므로 이전의 기존 데이터를 저장
                                             }
                                         }
                                     }
                                 }
 
-                                if (docData.typeInfo['selected'] === true) {
+                                if (docData.typeInfo['selected'] === true) { // 유형 선택 후 등록 시 selected 가 true일때 다시 불러오기 위함
                                     let siteTypeDefalut = document.querySelector('#siteType');
 
                                     for (let i = 0; i < siteTypeDefalut.length; i += 1) {
@@ -719,6 +752,8 @@ let siteListAll = () => {
                                         for (let j = 0; j < siteTypeDefalut.length; j += 1) {
                                             if (siteTypeDefalut.options[j].value === docData.typeInfo['type']) {
                                                 siteTypeDefalut.options[j].setAttribute('selected', 'selected');
+                                                siteTypeData = siteTypeDefalut.options[j].value; // 변경을 안했을때 undefined 이므로 이전의 기존 데이터를 저장
+                                                isType = docData.typeInfo['selected']; // 변경을 안했을때 undefined 이므로 이전의 기존 데이터를 저장
                                             }
                                         }
                                     }

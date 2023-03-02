@@ -44,27 +44,24 @@ ul, li {margin: 0; padding: 0; font-size: 16px; list-style-type: none;}
 a {text-decoration: none;}
 a:active, a:focus {
     outline: none;
-    /*color: #000000;*/
 }
 select {
-    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="none" d="M0 0h24v24H0z"/><path d="M12 16l-6-6h12z" fill="rgba(62,84,211,1)"/></svg>');
-    background-repeat: no-repeat;
-    background-position: right;
-    background-color: transparent;
+    background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="none" d="M0 0h24v24H0z"/><path d="M12 16l-6-6h12z" fill="rgba(62,84,211,1)"/></svg>') right transparent no-repeat;
+    height: 35px;
+    padding: 0px 15px 0px 15px;
+    margin: 0 15px 15px 0;
     color: #ffffff;
-    padding: 10px 15px 10px 15px;
     border: 1px solid #666666;
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
-    margin: 0 15px 15px 0;
     outline: none;
 }
 select option {background: #1E1E1E;}
 select::-ms-expand {display: none;}
 button, input, textarea {font-family: 'Noto Sans KR', sans-serif; border: none; outline: 0; background: none; padding: 0; color: #ffffff; font-size: 14px;}
 button {cursor: pointer;}
-input {width: 100%; height: 50px; border: 1px solid #666666; padding: 0 15px 0 15px; margin: 0 0 15px 0;}
+input {width: 100%; height: 50px; border: 1px solid #666666; padding: 0 15px 0 15px; margin: 0 0 15px 0; font-size: 15px;}
 input::focus {border: 1px solid #3e54d3;}
 input::-webkit-autofill,
 input::-webkit-autofill:hover,
@@ -74,7 +71,40 @@ input::-webkit-autofill:active {
     -webkit-transition: background-color 9999s ease-out;
     -webkit-text-fill-color: #fff;
 }
-textarea {font-family: 'Noto Sans KR', sans-serif; width: 100%; resize: none; margin: 0 0 15px 0; font-size: 14px; font-weight: 400 !important;}
+input[type="file"] {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0,0,0,0);
+    border: 0;
+}
+input[type="date"]::-webkit-calendar-picker-indicator {
+    display: block;
+    background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18"><path fill="none" d="M0 0h24v24H0z"/><path d="M17 3h4a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h4V1h2v2h6V1h2v2zM4 9v10h16V9H4zm2 2h2v2H6v-2zm5 0h2v2h-2v-2zm5 0h2v2h-2v-2z" fill="rgba(62,84,211,1)"/></svg>') no-repeat;
+    color: rgba(0, 0, 0, 0);
+    opacity: 1;
+    border-width: thin;
+    /* 달력 아이콘 없애기 & input, label 영역 클릭 시 달력 나오도록 */
+    /*position: absolute;*/
+    /*left: 0;*/
+    /*right: 0;*/
+    /*top: 0;*/
+    /*bottom: 0;*/
+    /*width: auto;*/
+    /*height: auto;*/
+    /*background: transparent;*/
+    /*cursor: pointer;*/
+}
+input[type="date"]::-webkit-datetime-edit-text,
+input[type="date"]::-webkit-datetime-edit-month-field,
+input[type="date"]::-webkit-datetime-edit-day-field,
+input[type="date"]::-webkit-datetime-edit-year-field {
+    color: #ffffff;
+}
+textarea {font-family: 'Noto Sans KR', sans-serif; width: 100%; resize: none; margin: 0 0 15px 0; font-size: 15px; font-weight: 400 !important;}
 textarea::focus {border: 1px solid #3e54d3;}
 select::focus {border: 1px solid #3e54d3;}
 p {line-height: 1.2; margin:0; font-size: 16px;}
@@ -115,6 +145,7 @@ img {max-width: 100%;}
     align-items: center;
     justify-content: space-between;
     flex-wrap: wrap;
+    gap: 15px;
 }
 .sub-title {
     font-size: 24px;
@@ -155,25 +186,15 @@ img {max-width: 100%;}
 .ide-style .json-type-2 {
     background: #000000;
     padding: 40px 50px 40px 50px;
-    margin: 10px 0 10px 0;
+    margin: 10px 0px 10px 0px;
 }
 .json-type-2 {
-    padding: 40px 0 40px 50px;
+    padding: 40px 0px 40px 50px;
     border-left: 1px solid #666666;
 }
 .file-box {
     display: flex;
     gap: 10px;
-}
-.file-box input[type="file"] {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    margin: -1px;
-    overflow: hidden;
-    clip:rect(0,0,0,0);
-    border: 0;
 }
 .file-box label {
     display: flex;
@@ -188,7 +209,7 @@ img {max-width: 100%;}
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
-    font-size: 14px;
+    font-size: 15px;
     color: #7f7f7f;
 }
 #modalBg {
@@ -323,8 +344,28 @@ img {max-width: 100%;}
 .modal-select-box:last-child {
     margin: 0 0 15px 0;
 }
+.modal-date-box-wrap {
+    display: flex;
+}
+.modal-date-box {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    margin: 0px 15px 15px 0px;
+}
+.modal-date-box:last-child {
+    margin: 0px 0px 15px 0px;
+}
+.modal-date-box label {
+    flex: 100px;
+}
+.modal-date-box input {
+    height: 35px;
+    margin: 0px;
+    font-size: 14px;
+}
 .more-view {
-    margin: 50px 0 0 0;
+    margin: 50px 0px 0px 0px;
     text-align: center;
 }
 
@@ -714,11 +755,6 @@ img {max-width: 100%;}
     text-transform: uppercase;
     transition: 0.3s;
     font-weight: 600;
-}
-.site-thumbnail-view .site-thumbnail-view-link:hover {
-    border: 1px solid #000000;
-    background: #ffffff;
-    color: #000000;
 }
 .site-thumbnail-view .site-thumbnail-view-btn {
     padding: 7px 15px 7px 15px;
