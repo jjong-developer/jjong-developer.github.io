@@ -38,6 +38,12 @@
     .json-type-1 dl {
         padding: 60px 0 60px 40px;
     }
+    .title {
+        font-size: 44px;
+    }
+    .sub-title {
+        font-size: 20px;
+    }
     .modal-wrap {
         width: 100%;
         max-width: 650px;
@@ -107,6 +113,9 @@
     .title {
         font-size: 38px;
     }
+    .sub-title {
+        font-size: 18px;
+    }
     .json-type-1 strong {
         font-size: 40px;
     }
@@ -125,6 +134,9 @@
     }
     .modal-wrap {
         max-width: 380px;
+    }
+    .modal-date-box-wrap {
+        display: block;
     }
 
     /**
