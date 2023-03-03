@@ -33,7 +33,7 @@ let superAdmin = ['jongwook2.kim@gmail.com']; // 관리자 권한 이메일 설�
 let isSuperAdmin, isModalBg = false;
 let isCategories, isType;
 let fileUpload;
-let siteCategoriesData, siteTypeData, siteName, siteDescription, siteLink, siteThumbnailUrl = '';
+let startPeriodData, endPeriodData, siteCategoriesData, siteTypeData, siteName, siteDescription, siteLink, siteThumbnailUrl = '';
 
 /**
  * global function
@@ -174,7 +174,7 @@ const portfolioSite = () => { // 포트폴리오 사이트 글 등록, 수정 �
     siteLink = document.querySelector('#siteLink');
 }
 
-const fileChange = () => { // 첨부파일 선택 함수
+const fileChange = () => { // 첨부파일 변경
     let fileNameTarget = document.querySelector('.file-name');
 
     document.querySelector('#fileUploadFind').addEventListener('change', (e) => {
@@ -197,7 +197,23 @@ const fileChange = () => { // 첨부파일 선택 함수
     });
 }
 
-const siteCategoriesSelected = () => { // 포트폴리오 사이트 분류 선택
+const calendarChange = (startType, endType) => { // 기간 시작 & 종료 날짜 선택
+    let startPeriod = document.querySelector('#startPeriod');
+    let endPeriod = document.querySelector('#endPeriod');
+
+    if (startType === 'start') {
+        startPeriod.addEventListener('change', (e) => {
+            startPeriodData = e.target.value;
+        });
+    }
+    if (endType === 'end') {
+        endPeriod.addEventListener('change', (e) => {
+            endPeriodData = e.target.value;
+        });
+    }
+}
+
+const siteCategoriesChange = () => { // 포트폴리오 사이트 분류 선택
     let siteCategories = document.querySelector('#siteCategories');
 
     siteCategories.addEventListener('change', (e) => {
@@ -215,7 +231,7 @@ const siteCategoriesSelected = () => { // 포트폴리오 사이트 분류 선�
     });
 }
 
-const siteTypeSelected = () => { // 포트폴리오 사이트 유형 선택
+const siteTypeChange = () => { // 포트폴리오 사이트 유형 선택
     let siteType = document.querySelector('#siteType');
 
     siteType.addEventListener('change', (e) => {
@@ -425,13 +441,19 @@ dbAuth().onAuthStateChanged((user) => { // 로그인 상태 여/부
          */
         document.querySelector('#portfolioSiteWriteBtn').addEventListener('click', () => {
             portfolioSite();
-            siteCategoriesSelected();
-            siteTypeSelected();
+            calendarChange('start', 'end');
+            siteCategoriesChange();
+            siteTypeChange();
             fileChange();
 
             document.querySelector('#writeBtn').addEventListener('click', () => { // 포트폴리오 사이트 글 등록하기
                 if (isSuperAdmin) {
-                    if (siteCategoriesData !== undefined && siteTypeData !== undefined && siteName.value !== '' && siteDescription.value !== '' && siteLink.value !== '' && fileUpload !== undefined) {
+                    if (startPeriodData !== undefined && endPeriodData !== undefined && siteCategoriesData !== undefined && siteTypeData !== undefined && siteName.value !== '' && siteDescription.value !== '' && siteLink.value !== '' && fileUpload !== undefined) {
+                        let calendarJSON = {
+                            startPeriod: startPeriodData,
+                            endPeriod: endPeriodData,
+                        }
+
                         let categoriesJSON = {
                             categories: siteCategoriesData,
                             selected: isCategories,
@@ -443,12 +465,13 @@ dbAuth().onAuthStateChanged((user) => { // 로그인 상태 여/부
                         };
 
                         let dataSave = {
+                            projectPeriod: calendarJSON, // 시작 & 종료 기간
                             categoriesInfo: categoriesJSON, // 분류 & 선택 여부
                             typeInfo: typeJSON, // 유형 & 선택 여부
                             title: siteName.value, // 이름
                             description: siteDescription.value, // 설명
                             link: siteLink.value, // 주소
-                            thumbnailUrl: siteThumbnailUrl, // 썸네일 이미지 주소
+                            thumbnailUrl: siteThumbnailUrl, // 썸네일 이미지 경로
                         };
 
                         dbFireStore().collection('site').add(dataSave).then(() => {
@@ -672,6 +695,7 @@ let siteListAll = () => {
                         '</div>' +
                         '<span class="site-thumbnail-view-type">' + docData.typeInfo['type'] + '</span>' +
                         '<h3 class="site-thumbnail-view-title">' + docData.title + '</h3>' +
+                        '<span class="site-thumbnail-view-period">' + '(' + docData.projectPeriod['startPeriod'] + ' ~ ' + docData.projectPeriod['endPeriod'] + ')' + '</span>' +
                         '<p class="site-thumbnail-view-description">' + docData.description + '</p>' +
                         '<a class="site-thumbnail-view-link" href="' + docData.link + '" target="_blank">' +
                             'view more' +
@@ -711,8 +735,9 @@ let siteListAll = () => {
                         el.addEventListener('click', () => {
                             if (isUser) {
                                 portfolioSite();
-                                siteCategoriesSelected();
-                                siteTypeSelected();
+                                calendarChange('start', 'end');
+                                siteCategoriesChange();
+                                siteTypeChange();
                                 fileChange();
 
                                 document.querySelector('#writeBtn').id = 'writeModifyBtn';
@@ -720,10 +745,17 @@ let siteListAll = () => {
                                 document.querySelector('#writeModifyBtn').textContent = '수정하기';
                                 document.querySelector('#writeModifyBtn').dataset.id = el.getAttribute('data-id');
 
+                                document.querySelector('#startPeriod').value = docData.projectPeriod['startPeriod'];
+                                document.querySelector('#endPeriod').value = docData.projectPeriod['endPeriod'];
                                 document.querySelector('#siteName').value = docData.title;
                                 document.querySelector('#siteDescription').value = docData.description;
                                 document.querySelector('#siteLink').value = docData.link;
                                 document.querySelector('.file-name').value = docData.thumbnailUrl;
+
+                                if (docData.projectPeriod['startPeriod'] !== undefined && docData.projectPeriod['endPeriod'] !== undefined) { // 수정을 안했을때 undefined 이므로 이전의 기존 데이터를 저장
+                                    startPeriodData = docData.projectPeriod['startPeriod'];
+                                    endPeriodData = docData.projectPeriod['endPeriod'];
+                                }
 
                                 if (docData.categoriesInfo['selected'] === true) { // 분류 선택 후 등록 시 selected 가 true일때 다시 불러오기 위함
                                     let siteCategoriesDefalut = document.querySelector('#siteCategories');
@@ -735,8 +767,8 @@ let siteListAll = () => {
                                         for (let j = 0; j < siteCategoriesDefalut.length; j += 1) {
                                             if (siteCategoriesDefalut.options[j].value === docData.categoriesInfo['categories']) {
                                                 siteCategoriesDefalut.options[j].setAttribute('selected', 'selected');
-                                                siteCategoriesData = siteCategoriesDefalut.options[j].value; // 변경을 안했을때 undefined 이므로 이전의 기존 데이터를 저장
-                                                isCategories = docData.categoriesInfo['selected']; // 변경을 안했을때 undefined 이므로 이전의 기존 데이터를 저장
+                                                siteCategoriesData = siteCategoriesDefalut.options[j].value; // 수정을 안했을때 undefined 이므로 이전의 기존 데이터를 저장
+                                                isCategories = docData.categoriesInfo['selected']; // 수정을 안했을때 undefined 이므로 이전의 기존 데이터를 저장
                                             }
                                         }
                                     }
@@ -752,8 +784,8 @@ let siteListAll = () => {
                                         for (let j = 0; j < siteTypeDefalut.length; j += 1) {
                                             if (siteTypeDefalut.options[j].value === docData.typeInfo['type']) {
                                                 siteTypeDefalut.options[j].setAttribute('selected', 'selected');
-                                                siteTypeData = siteTypeDefalut.options[j].value; // 변경을 안했을때 undefined 이므로 이전의 기존 데이터를 저장
-                                                isType = docData.typeInfo['selected']; // 변경을 안했을때 undefined 이므로 이전의 기존 데이터를 저장
+                                                siteTypeData = siteTypeDefalut.options[j].value; // 수정을 안했을때 undefined 이므로 이전의 기존 데이터를 저장
+                                                isType = docData.typeInfo['selected']; // 수정을 안했을때 undefined 이므로 이전의 기존 데이터를 저장
                                             }
                                         }
                                     }
@@ -762,6 +794,11 @@ let siteListAll = () => {
                                 document.querySelectorAll('#writeModifyBtn').forEach((el) => {
                                     el.addEventListener('click', (e) => { // 포트폴리오 사이트 글 수정
                                         if (isSuperAdmin) {
+                                            let calendarJSON = {
+                                                startPeriod: startPeriodData,
+                                                endPeriod: endPeriodData,
+                                            }
+
                                             let categoriesJSON = {
                                                 categories: siteCategoriesData,
                                                 selected: isCategories,
@@ -773,12 +810,13 @@ let siteListAll = () => {
                                             };
 
                                             let dataUpdateSave = {
+                                                projectPeriod: calendarJSON, // 시작 & 종료 기간
                                                 categoriesInfo: categoriesJSON, // 분류 & 선택 여부
                                                 typeInfo: typeJSON, // 유형 & 선택 여부
                                                 title: siteName.value, // 이름
                                                 description: siteDescription.value, // 설명
                                                 link: siteLink.value, // 주소
-                                                thumbnailUrl: (siteThumbnailUrl !== '') ? siteThumbnailUrl : document.querySelector('.file-name').value, // 썸네일 이미지 주소
+                                                thumbnailUrl: (siteThumbnailUrl !== '') ? siteThumbnailUrl : document.querySelector('.file-name').value, // 썸네일 이미지 경로
                                             };
 
                                             dbFireStore().collection('site').doc(e.target.dataset.id).update(dataUpdateSave).then(() => {
