@@ -730,16 +730,20 @@ img {max-width: 100%;}
     color: #666666;
 }
 .site-thumbnail-view .site-thumbnail-view-title {
-    margin: -5px 0 20px 0;
+    margin: -5px 0px 5px 0px;
     font-size: 28px;
+}
+.site-thumbnail-view .site-thumbnail-view-period {
+
 }
 .site-thumbnail-view .site-thumbnail-view-description {
     overflow: hidden;
     text-overflow: ellipsis;
-    -webkit-line-clamp: 12;
+    -webkit-line-clamp: 11;
     -webkit-box-orient: vertical;
     display: -webkit-box;
     font-size: 16px;
+    margin: 20px 0px 0px 0px;
 }
 .site-thumbnail-view .site-thumbnail-view-link {
     font-family: 'Roboto', sans-serif;
