@@ -556,58 +556,51 @@ let siteNoListTempleat = '' +
     '<div>게시물이 없습니다.</div>';
 
 dbFireStore().collection('site').where('categoriesInfo.categories', '==', '쇼핑몰').get().then((result) => {
-    // 게시물이 총 9개 있음
     if (result.docs.length === 0) {
         document.querySelector('#shoppingMallList').innerHTML = siteNoListTempleat;
     }
 
-    result.forEach((doc) => {
-        let docData = doc.data();
+    const moreViewTempleat = '' +
+        '<button id="moreViewBtn" class="btn-type-2" type="button">' +
+            'more view' +
+        '</button>';
 
-        const siteListTempleat = '' +
-            '<div id="'+ doc.id +'" class="site-thumbnail-box">' +
-                '<img src="' + docData.thumbnailUrl + '" title="' + docData.title + '" />' +
-            '</div>';
+    document.querySelector('.more-view').innerHTML = moreViewTempleat;
 
-        document.querySelector('#shoppingMallList').innerHTML += siteListTempleat;
+    dbFireStore().collection('site').where('categoriesInfo.categories', '==', '쇼핑몰').limit(4).get().then((result2) => { // 처음에 4개만 보여줄 것
+        let lastList = result2.docs[result2.docs.length - 1];
+
+        result2.forEach((docList) => {
+            let docListData = docList.data();
+
+            const siteListTempleat = '' +
+                '<div id="'+ docList.id +'" class="site-list-box">' +
+                    '<img src="' + docListData.thumbnailUrl + '" title="' + docListData.title + '" />' +
+                '</div>';
+
+            document.querySelector('#shoppingMallList').innerHTML += siteListTempleat;
+        });
+
+        document.querySelector('#moreViewBtn').addEventListener('click', () => {
+            dbFireStore().collection('site').where('categoriesInfo.categories', '==', '쇼핑몰').startAfter(lastList).limit(4).get().then((result3) => { // 게시물 4개씩 더 불러오기
+                if (document.querySelectorAll('.site-list-box').length >= result.docs.length) {
+                    windowPopup('더 이상 게시물이 없습니다.');
+                } else {
+                    result3.forEach((docList) => {
+                        let docListData = docList.data();
+
+                        const siteListMoreTempleat = '' +
+                            '<div id="'+ docList.id +'" class="site-list-box">' +
+                                '<img src="' + docListData.thumbnailUrl + '" title="' + docListData.title + '" />' +
+                            '</div>';
+
+                        document.querySelector('#shoppingMallList').innerHTML += siteListMoreTempleat;
+                    });
+                    getSiteListDetail();
+                }
+            });
+        });
     });
-
-    // dbFireStore().collection('site').where('categoriesInfo.categories', '==', '쇼핑몰').limit(4).get().then((resultTest) => {
-    //     resultTest.forEach((doc) => {
-    //         let docData = doc.data();
-    //
-    //         const siteListTempleat = '' +
-    //             '<div id="'+ doc.id +'" class="site-thumbnail-box">' +
-    //                 '<img src="' + docData.thumbnailUrl + '" title="' + docData.title + '" />' +
-    //             '</div>';
-    //
-    //         const moreViewTempleat = '' +
-    //             '<button id="moreBtn" class="btn-type-2" type="button">' +
-    //                 'MORE' +
-    //             '</button>';
-    //
-    //         document.querySelector('#shoppingMallList').innerHTML += siteListTempleat;
-    //         document.querySelector('.more-view').innerHTML = moreViewTempleat;
-    //
-    //         document.querySelector('#moreBtn').addEventListener('click', () => { // 게시물 더 불러오기
-    //             let lastVisible = resultTest.docs[resultTest.docs.length - 1];
-    //             console.log(lastVisible);
-    //
-    //             dbFireStore().collection('site').where('categoriesInfo.categories', '==', '쇼핑몰').startAfter(lastVisible).limit(4).get().then((resultTest22) => {
-    //                 console.log(result.docs.length - 4 - resultTest22.docs.length);
-    //
-    //                 resultTest22.forEach((doc) => {
-    //                     const siteListTempleataaaa = '' +
-    //                         '<div id="'+ doc.id +'" class="site-thumbnail-box">' +
-    //                             '<img src="' + docData.thumbnailUrl + '" />' +
-    //                         '</div>';
-    //
-    //                     document.querySelector('#shoppingMallList').innerHTML += siteListTempleataaaa;
-    //                 });
-    //             });
-    //         });
-    //     });
-    // });
 });
 
 dbFireStore().collection('site').where('categoriesInfo.categories', '==', '호텔/팬션').get().then((result) => {
@@ -615,12 +608,12 @@ dbFireStore().collection('site').where('categoriesInfo.categories', '==', '호�
         document.querySelector('#hotelList').innerHTML = siteNoListTempleat;
     }
 
-    result.forEach((doc) => {
-        let docData = doc.data();
+    result.forEach((docList) => {
+        let docListData = docList.data();
 
         const siteListTempleat = '' +
-            '<div id="'+ doc.id +'" class="site-thumbnail-box">' +
-                '<img src="' + docData.thumbnailUrl + '" title="' + docData.title + '" />' +
+            '<div id="'+ docList.id +'" class="site-list-box">' +
+                '<img src="' + docListData.thumbnailUrl + '" title="' + docListData.title + '" />' +
             '</div>';
 
         document.querySelector('#hotelList').innerHTML += siteListTempleat;
@@ -632,12 +625,12 @@ dbFireStore().collection('site').where('categoriesInfo.categories', '==', '교�
         document.querySelector('#solutionServiceList').innerHTML = siteNoListTempleat;
     }
 
-    result.forEach((doc) => {
-        let docData = doc.data();
+    result.forEach((docList) => {
+        let docListData = docList.data();
 
         const siteListTempleat = '' +
-            '<div id="'+ doc.id +'" class="site-thumbnail-box">' +
-                '<img src="' + docData.thumbnailUrl + '" title="' + docData.title + '" />' +
+            '<div id="'+ docList.id +'" class="site-list-box">' +
+                '<img src="' + docListData.thumbnailUrl + '" title="' + docListData.title + '" />' +
             '</div>';
 
         document.querySelector('#solutionServiceList').innerHTML += siteListTempleat;
@@ -649,12 +642,12 @@ dbFireStore().collection('site').where('categoriesInfo.categories', '==', '제�
         document.querySelector('#semiconductorList').innerHTML = siteNoListTempleat;
     }
 
-    result.forEach((doc) => {
-        let docData = doc.data();
+    result.forEach((docList) => {
+        let docListData = docList.data();
 
         const siteListTempleat = '' +
-            '<div id="'+ doc.id +'" class="site-thumbnail-box">' +
-                '<img src="' + docData.thumbnailUrl + '" title="' + docData.title + '" />' +
+            '<div id="'+ docList.id +'" class="site-list-box">' +
+                '<img src="' + docListData.thumbnailUrl + '" title="' + docListData.title + '" />' +
             '</div>';
 
         document.querySelector('#semiconductorList').innerHTML += siteListTempleat;
@@ -666,65 +659,72 @@ dbFireStore().collection('site').where('categoriesInfo.categories', '==', '기�
         document.querySelector('#etcList').innerHTML = siteNoListTempleat;
     }
 
-    result.forEach((doc) => {
-        let docData = doc.data();
+    result.forEach((docList) => {
+        let docListData = docList.data();
 
         const siteListTempleat = '' +
-            '<div id="'+ doc.id +'" class="site-thumbnail-box">' +
-                '<img src="' + docData.thumbnailUrl + '" title="' + docData.title + '" />' +
+            '<div id="'+ docList.id +'" class="site-list-box">' +
+                '<img src="' + docListData.thumbnailUrl + '" title="' + docListData.title + '" />' +
             '</div>';
 
         document.querySelector('#etcList').innerHTML += siteListTempleat;
     });
 });
 
-let siteListAll = () => {
-    dbFireStore().collection('site').get().then((snapshot) => { // 등록한 포트폴리오 사이트 전체 불러오기
-        snapshot.forEach((doc) => {
-            let docData = doc.data();
-
-            console.log(docData);
+const getSiteListDetail = () => { // 등록한 포트폴리오 사이트 전체 불러오기
+    dbFireStore().collection('site').get().then((result) => {
+        result.forEach((docList) => {
+            let docListData = docList.data();
 
             // settimeout 임시로.. 추후에 변경해야함
             setTimeout(() => {
-                const siteThumbnailTempleat = '' +
-                    '<div class="site-thumbnail-view site-thumbnail-view-'+ doc.id +'">' +
+                const siteDetailViewTempleat = '' +
+                    '<div class="site-detail-view site-detail-view-'+ docList.id +'">' +
                         '<div class="btn-wrap">' +
-                            '<button id="modifyBtn" class="btn-type-1 site-thumbnail-view-btn" data-id="'+ doc.id +'" type="button">수정</button>' +
-                            '<button id="deleteBtn" class="btn-type-1 bg-danger site-thumbnail-view-btn" data-id="'+ doc.id +'" type="button">삭제</button>' +
+                            '<button id="modifyBtn" class="btn-type-1 site-detail-view-btn" data-id="'+ docList.id +'" type="button">수정</button>' +
+                            '<button id="deleteBtn" class="btn-type-1 bg-danger site-detail-view-btn" data-id="'+ docList.id +'" type="button">삭제</button>' +
                         '</div>' +
-                        '<span class="site-thumbnail-view-type">' + docData.typeInfo['type'] + '</span>' +
-                        '<h3 class="site-thumbnail-view-title">' + docData.title + '</h3>' +
-                        '<span class="site-thumbnail-view-period">' + '(' + docData.projectPeriod['startPeriod'] + ' ~ ' + docData.projectPeriod['endPeriod'] + ')' + '</span>' +
-                        '<p class="site-thumbnail-view-description">' + docData.description + '</p>' +
-                        '<a class="site-thumbnail-view-link" href="' + docData.link + '" target="_blank">' +
+                        '<span class="site-detail-view-type">' + docListData.typeInfo['type'] + '</span>' +
+                        '<h3 class="site-detail-view-title">' + docListData.title + '</h3>' +
+                        '<span class="site-detail-view-period">' + '(' + docListData.projectPeriod['startPeriod'] + ' ~ ' + docListData.projectPeriod['endPeriod'] + ')' + '</span>' +
+                        '<p class="site-detail-view-description">' + docListData.description + '</p>' +
+                        '<a class="site-detail-view-link" href="' + docListData.link + '" target="_blank">' +
                             'view more' +
                             '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="none" d="M0 0h24v24H0z"/><path class="fill" d="M13.172 12l-4.95-4.95 1.414-1.414L16 12l-6.364 6.364-1.414-1.414z" fill="#ffffff"/></svg>' +
                         '</a>' +
                     '</div>';
 
-                // querySelector는 인자값으로 숫자를 받지못해서 id를 지정했을때 고유의 값이라 숫자를 인식 못하여 getElementById 함수로 사용함
+                // querySelector는 인자값으로 숫자를 받지못해서 id를 지정했을때 고유의 값이라 숫자를 인식 못하여 getElementById 함수로 사용
                 // 예) id="5RLvZOBC1iPl3UEO0nwD"
-                let docID = document.getElementById(''+ doc.id +'')
+                let docID = document.getElementById(''+ docList.id +'')
 
-                // 상단에 siteListTempleat 변수에 정의한 html의 doc.id(문서의 고유id)값을 가져와서 매치하여 이벤트 실행
+                // siteListTempleat 변수에 정의한 html의 doc.id(문서의 고유id)값을 가져와서 매치하여 실행
                 docID.addEventListener('mouseenter', () => {
-                    document.getElementById(''+ doc.id +'').insertAdjacentHTML('afterbegin', siteThumbnailTempleat);
+                    document.getElementById(''+ docList.id +'').insertAdjacentHTML('afterbegin', siteDetailViewTempleat);
 
-                    let siteThumbnailViewLink = document.querySelector('.site-thumbnail-view .site-thumbnail-view-link');
+                    document.querySelector('.site-detail-view').animate([
+                        // from keyframe
+                        {
+                            opacity: 0,
+                        },
+                        // to keyframe
+                        {
+                            opacity: 1,
+                        }
+                    ], 130);
 
-                    siteThumbnailViewLink.addEventListener('mouseenter', (e) => {
+                    let siteDetailViewLink = document.querySelector('.site-detail-view .site-detail-view-link');
+
+                    siteDetailViewLink.addEventListener('mouseenter', (e) => {
                         let targetViewLink = e.target;
 
-                        targetViewLink.style.backgroundColor = '#ffffff';
-                        targetViewLink.style.color = '#000000';
+                        targetViewLink.classList.add('active');
                         targetViewLink.children[0].innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="none" d="M0 0h24v24H0z"/><path class="fill" d="M13.172 12l-4.95-4.95 1.414-1.414L16 12l-6.364 6.364-1.414-1.414z" fill="#000000"/></svg>';
                     });
-                    siteThumbnailViewLink.addEventListener('mouseleave', (e) => {
+                    siteDetailViewLink.addEventListener('mouseleave', (e) => {
                         let targetViewLink = e.target;
 
-                        targetViewLink.style.backgroundColor = 'unset';
-                        targetViewLink.style.color = '#ffffff';
+                        targetViewLink.classList.remove('active');
                         targetViewLink.children[0].innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="none" d="M0 0h24v24H0z"/><path class="fill" d="M13.172 12l-4.95-4.95 1.414-1.414L16 12l-6.364 6.364-1.414-1.414z" fill="#ffffff"/></svg>';
                     });
 
@@ -745,19 +745,19 @@ let siteListAll = () => {
                                 document.querySelector('#writeModifyBtn').textContent = '수정하기';
                                 document.querySelector('#writeModifyBtn').dataset.id = el.getAttribute('data-id');
 
-                                document.querySelector('#startPeriod').value = docData.projectPeriod['startPeriod'];
-                                document.querySelector('#endPeriod').value = docData.projectPeriod['endPeriod'];
-                                document.querySelector('#siteName').value = docData.title;
-                                document.querySelector('#siteDescription').value = docData.description;
-                                document.querySelector('#siteLink').value = docData.link;
-                                document.querySelector('.file-name').value = docData.thumbnailUrl;
+                                document.querySelector('#startPeriod').value = docListData.projectPeriod['startPeriod'];
+                                document.querySelector('#endPeriod').value = docListData.projectPeriod['endPeriod'];
+                                document.querySelector('#siteName').value = docListData.title;
+                                document.querySelector('#siteDescription').value = docListData.description;
+                                document.querySelector('#siteLink').value = docListData.link;
+                                document.querySelector('.file-name').value = docListData.thumbnailUrl;
 
-                                if (docData.projectPeriod['startPeriod'] !== undefined && docData.projectPeriod['endPeriod'] !== undefined) { // 수정을 안했을때 undefined 이므로 이전의 기존 데이터를 저장
-                                    startPeriodData = docData.projectPeriod['startPeriod'];
-                                    endPeriodData = docData.projectPeriod['endPeriod'];
+                                if (docListData.projectPeriod['startPeriod'] !== undefined && docListData.projectPeriod['endPeriod'] !== undefined) { // 수정을 안했을때 undefined 이므로 이전의 기존 데이터를 저장
+                                    startPeriodData = docListData.projectPeriod['startPeriod'];
+                                    endPeriodData = docListData.projectPeriod['endPeriod'];
                                 }
 
-                                if (docData.categoriesInfo['selected'] === true) { // 분류 선택 후 등록 시 selected 가 true일때 다시 불러오기 위함
+                                if (docListData.categoriesInfo['selected'] === true) { // 분류 선택 후 등록 시 selected 가 true일때 다시 불러오기 위함
                                     let siteCategoriesDefalut = document.querySelector('#siteCategories');
 
                                     for (let i = 0; i < siteCategoriesDefalut.length; i += 1) {
@@ -765,16 +765,16 @@ let siteListAll = () => {
                                         siteCategoriesDefalut[i].removeAttribute('selected');
 
                                         for (let j = 0; j < siteCategoriesDefalut.length; j += 1) {
-                                            if (siteCategoriesDefalut.options[j].value === docData.categoriesInfo['categories']) {
+                                            if (siteCategoriesDefalut.options[j].value === docListData.categoriesInfo['categories']) {
                                                 siteCategoriesDefalut.options[j].setAttribute('selected', 'selected');
                                                 siteCategoriesData = siteCategoriesDefalut.options[j].value; // 수정을 안했을때 undefined 이므로 이전의 기존 데이터를 저장
-                                                isCategories = docData.categoriesInfo['selected']; // 수정을 안했을때 undefined 이므로 이전의 기존 데이터를 저장
+                                                isCategories = docListData.categoriesInfo['selected']; // 수정을 안했을때 undefined 이므로 이전의 기존 데이터를 저장
                                             }
                                         }
                                     }
                                 }
 
-                                if (docData.typeInfo['selected'] === true) { // 유형 선택 후 등록 시 selected 가 true일때 다시 불러오기 위함
+                                if (docListData.typeInfo['selected'] === true) { // 유형 선택 후 등록 시 selected 가 true일때 다시 불러오기 위함
                                     let siteTypeDefalut = document.querySelector('#siteType');
 
                                     for (let i = 0; i < siteTypeDefalut.length; i += 1) {
@@ -782,10 +782,10 @@ let siteListAll = () => {
                                         siteTypeDefalut[i].removeAttribute('selected');
 
                                         for (let j = 0; j < siteTypeDefalut.length; j += 1) {
-                                            if (siteTypeDefalut.options[j].value === docData.typeInfo['type']) {
+                                            if (siteTypeDefalut.options[j].value === docListData.typeInfo['type']) {
                                                 siteTypeDefalut.options[j].setAttribute('selected', 'selected');
                                                 siteTypeData = siteTypeDefalut.options[j].value; // 수정을 안했을때 undefined 이므로 이전의 기존 데이터를 저장
-                                                isType = docData.typeInfo['selected']; // 수정을 안했을때 undefined 이므로 이전의 기존 데이터를 저장
+                                                isType = docListData.typeInfo['selected']; // 수정을 안했을때 undefined 이므로 이전의 기존 데이터를 저장
                                             }
                                         }
                                     }
@@ -842,10 +842,10 @@ let siteListAll = () => {
                     /**
                      * portfolio sites write delete
                      */
-                    document.querySelectorAll('#deleteBtn').forEach((el) => { // 삭제
+                    document.querySelectorAll('#deleteBtn').forEach((el) => {
                         el.addEventListener('click', () => {
                             if (isUser) {
-                                windowPopup('"' + docData.title + '" 게시물을 삭제하시겠습니까?<br>한번 삭제를하면 복구가 불가능합니다.', '<button id="windowPopupCancel" class="bg-danger" type="button">취소</button>');
+                                windowPopup('"' + docListData.title + '" 게시물을 삭제하시겠습니까?<br>한번 삭제를하면 복구가 불가능합니다.', '<button id="windowPopupCancel" class="bg-danger" type="button">취소</button>');
                                 document.querySelector('#windowPopupOk').id = 'writeDeleteBtn';
                                 document.querySelector('#writeDeleteBtn').dataset.id = el.getAttribute('data-id');
                                 document.querySelectorAll('#writeDeleteBtn').forEach((el) => {
@@ -874,15 +874,15 @@ let siteListAll = () => {
                     });
                 });
 
-                // 상단에 siteThumbnailTempleat 변수에 정의한 html의 site-thumbnail-view-'+doc.id' 매치하여 이벤트 실행
+                // 상단에 siteDetailViewTempleat 변수에 정의한 html의 site-detail-view-'+doc.id' 매치하여 이벤트 실행
                 docID.addEventListener('mouseleave', () => {
-                    document.querySelector('.site-thumbnail-view-'+doc.id).remove();
+                    document.querySelector('.site-detail-view-'+docList.id).remove();
                 });
             }, 500);
         });
     });
 }
-siteListAll();
+getSiteListDetail();
 
 function signUp(self) {
     self.closest('.sign-auth-wrap').classList.toggle('switch-mode');
@@ -1116,8 +1116,18 @@ skillBox.forEach((el, i) => {
         '</div>';
 
     el.addEventListener('mouseenter', () => {
-        // el.innerHTML += skillTempleat;
         el.insertAdjacentHTML('afterbegin', skillTempleat);
+
+        el.animate([
+            // from keyframe
+            {
+                opacity: 0,
+            },
+            // to keyframe
+            {
+                opacity: 1,
+            }
+        ], 140);
     });
 
     el.addEventListener('mouseleave', () => {

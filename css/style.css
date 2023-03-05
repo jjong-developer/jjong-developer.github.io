@@ -368,6 +368,9 @@ img {max-width: 100%;}
     margin: 50px 0px 0px 0px;
     text-align: center;
 }
+.more-view button {
+    text-transform: uppercase;
+}
 
 /**
     swiper slider common
@@ -705,17 +708,17 @@ img {max-width: 100%;}
     flex-wrap: wrap;
     gap: 20px;
 }
-.site-thumbnail-box {
+.site-list-box {
     position: relative;
     /*width: 49%;*/
     width: 540px;
 }
-.site-thumbnail-box img {
+.site-list-box img {
     width: 100%;
     height: 100%;
     box-shadow: rgb(0 0 0 / 30%) 20px 20px 12px 0px;
 }
-.site-thumbnail-view {
+.site-detail-view {
     position: absolute;
     top: 0;
     left: 0;
@@ -724,19 +727,19 @@ img {max-width: 100%;}
     background: rgba(0, 0, 0, 0.85);
     padding: 25px;
 }
-.site-thumbnail-view .site-thumbnail-view-type {
+.site-detail-view .site-detail-view-type {
     font-family: 'Roboto', sans-serif;
     font-size: 18px;
     color: #666666;
 }
-.site-thumbnail-view .site-thumbnail-view-title {
+.site-detail-view .site-detail-view-title {
     margin: -5px 0px 5px 0px;
     font-size: 28px;
 }
-.site-thumbnail-view .site-thumbnail-view-period {
+.site-detail-view .site-detail-view-period {
 
 }
-.site-thumbnail-view .site-thumbnail-view-description {
+.site-detail-view .site-detail-view-description {
     overflow: hidden;
     text-overflow: ellipsis;
     -webkit-line-clamp: 11;
@@ -745,7 +748,7 @@ img {max-width: 100%;}
     font-size: 16px;
     margin: 20px 0px 0px 0px;
 }
-.site-thumbnail-view .site-thumbnail-view-link {
+.site-detail-view .site-detail-view-link {
     font-family: 'Roboto', sans-serif;
     position: absolute;
     bottom: 25px;
@@ -760,7 +763,11 @@ img {max-width: 100%;}
     transition: 0.3s;
     font-weight: 600;
 }
-.site-thumbnail-view .site-thumbnail-view-btn {
+.site-detail-view .site-detail-view-link.active {
+    background: #ffffff;
+    color: #000000;
+}
+.site-detail-view .site-detail-view-btn {
     padding: 7px 15px 7px 15px;
     font-size: 14px;
 }
