@@ -556,7 +556,8 @@ let siteNoListTempleat = '' +
     '<div>게시물이 없습니다.</div>';
 
 dbFireStore().collection('site').where('categoriesInfo.categories', '==', '쇼핑몰').get().then((result) => {
-    // 게시물이 총 9개 있음
+    // 게시물이 총 6개 있음
+    // 화면에 4개씩 보여줄 것
     if (result.docs.length === 0) {
         document.querySelector('#shoppingMallList').innerHTML = siteNoListTempleat;
     }
@@ -710,6 +711,17 @@ let siteListAll = () => {
                 // 상단에 siteListTempleat 변수에 정의한 html의 doc.id(문서의 고유id)값을 가져와서 매치하여 이벤트 실행
                 docID.addEventListener('mouseenter', () => {
                     document.getElementById(''+ doc.id +'').insertAdjacentHTML('afterbegin', siteThumbnailTempleat);
+
+                    document.querySelector('.site-thumbnail-view').animate([
+                        // from keyframe
+                        {
+                            opacity: 0,
+                        },
+                        // to keyframe
+                        {
+                            opacity: 1,
+                        }
+                    ], 130);
 
                     let siteThumbnailViewLink = document.querySelector('.site-thumbnail-view .site-thumbnail-view-link');
 
@@ -1116,8 +1128,18 @@ skillBox.forEach((el, i) => {
         '</div>';
 
     el.addEventListener('mouseenter', () => {
-        // el.innerHTML += skillTempleat;
         el.insertAdjacentHTML('afterbegin', skillTempleat);
+
+        el.animate([
+            // from keyframe
+            {
+                opacity: 0,
+            },
+            // to keyframe
+            {
+                opacity: 1,
+            }
+        ], 140);
     });
 
     el.addEventListener('mouseleave', () => {
