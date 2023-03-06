@@ -446,7 +446,7 @@ dbAuth().onAuthStateChanged((user) => { // 로그인 상태 여/부
             siteTypeChange();
             fileChange();
 
-            document.querySelector('#writeBtn').addEventListener('click', () => { // 포트폴리오 사이트 글 등록하기
+            document.querySelector('#writeBtn').addEventListener('click', () => { // 포트폴리오 사이트 글 등록
                 if (isSuperAdmin) {
                     if (startPeriodData !== undefined && endPeriodData !== undefined && siteCategoriesData !== undefined && siteTypeData !== undefined && siteName.value !== '' && siteDescription.value !== '' && siteLink.value !== '' && fileUpload !== undefined) {
                         let calendarJSON = {
@@ -552,54 +552,56 @@ dbAuth().onAuthStateChanged((user) => { // 로그인 상태 여/부
 /**
  * portfolio sites list view
  */
-let siteNoListTempleat = '' +
-    '<div>게시물이 없습니다.</div>';
+let limit = 4; // 처음 화면에 보여줄 게시물 갯수
+let limitAdd = 4; // 더보기 시 보여줄 게시물 갯수
+let moreViewTempleat =
+    '<button id="moreViewBtn" class="btn-type-2 more-view" type="button">' +
+        'more view' +
+    '</button>';
+let siteNoListTempleat = '<div>게시물이 없습니다.</div>';
 
 dbFireStore().collection('site').where('categoriesInfo.categories', '==', '쇼핑몰').get().then((result) => {
     if (result.docs.length === 0) {
         document.querySelector('#shoppingMallList').innerHTML = siteNoListTempleat;
     }
 
-    const moreViewTempleat = '' +
-        '<button id="moreViewBtn" class="btn-type-2" type="button">' +
-            'more view' +
-        '</button>';
+    result.forEach((docList) => {
+        let docListData = docList.data();
 
-    document.querySelector('.more-view').innerHTML = moreViewTempleat;
+        const siteListTempleat = '' +
+            '<div id="'+ docList.id +'" class="site-list-box">' +
+                '<img src="' + docListData.thumbnailUrl + '" title="' + docListData.title + '" />' +
+            '</div>';
 
-    dbFireStore().collection('site').where('categoriesInfo.categories', '==', '쇼핑몰').limit(4).get().then((result2) => { // 처음에 4개만 보여줄 것
-        let lastList = result2.docs[result2.docs.length - 1];
+        document.querySelector('#shoppingMallList').innerHTML += siteListTempleat; // 게시물 생성
+    });
 
-        result2.forEach((docList) => {
-            let docListData = docList.data();
+    document.querySelector('#shoppingMallList').insertAdjacentHTML('afterend', moreViewTempleat); // 더보기 버튼 생성
 
-            const siteListTempleat = '' +
-                '<div id="'+ docList.id +'" class="site-list-box">' +
-                    '<img src="' + docListData.thumbnailUrl + '" title="' + docListData.title + '" />' +
-                '</div>';
+    let siteListBox = document.querySelectorAll('#shoppingMallList .site-list-box');
+    let moreViewBtn = document.querySelector('#moreViewBtn');
+    let siteListBoxLength = siteListBox.length;
 
-            document.querySelector('#shoppingMallList').innerHTML += siteListTempleat;
-        });
+    if (siteListBoxLength > limit) { // 처음 화면에 보여주는 게시물들
+        for (let i = limit; i < siteListBoxLength; i += 1) {
+            siteListBox[i].classList.add('hidden');
+        }
+    }
 
-        document.querySelector('#moreViewBtn').addEventListener('click', () => {
-            dbFireStore().collection('site').where('categoriesInfo.categories', '==', '쇼핑몰').startAfter(lastList).limit(4).get().then((result3) => { // 게시물 4개씩 더 불러오기
-                if (document.querySelectorAll('.site-list-box').length >= result.docs.length) {
-                    windowPopup('더 이상 게시물이 없습니다.');
-                } else {
-                    result3.forEach((docList) => {
-                        let docListData = docList.data();
+    moreViewBtn.addEventListener('click', () => { // 더보기
+        let siteListBoxHidden = document.querySelectorAll('#shoppingMallList .site-list-box.hidden');
 
-                        const siteListMoreTempleat = '' +
-                            '<div id="'+ docList.id +'" class="site-list-box">' +
-                                '<img src="' + docListData.thumbnailUrl + '" title="' + docListData.title + '" />' +
-                            '</div>';
+        if (siteListBoxHidden.length < limitAdd) {
+            limitAdd = siteListBoxHidden.length;
+        }
 
-                        document.querySelector('#shoppingMallList').innerHTML += siteListMoreTempleat;
-                    });
-                    getSiteListDetail();
-                }
-            });
-        });
+        for (let i = 0; i < limitAdd; i += 1) {
+            siteListBoxHidden[i].classList.remove('hidden');
+        }
+
+        if (document.querySelectorAll('#shoppingMallList .site-list-box.hidden').length === 0) {
+            moreViewBtn.style.display = 'none';
+        }
     });
 });
 
@@ -671,7 +673,7 @@ dbFireStore().collection('site').where('categoriesInfo.categories', '==', '기�
     });
 });
 
-const getSiteListDetail = () => { // 등록한 포트폴리오 사이트 전체 불러오기
+const getSiteListDetail = () => { // 등록한 포트폴리오 사이트 글 전체 불러오기
     dbFireStore().collection('site').get().then((result) => {
         result.forEach((docList) => {
             let docListData = docList.data();
@@ -696,10 +698,10 @@ const getSiteListDetail = () => { // 등록한 포트폴리오 사이트 전체 
 
                 // querySelector는 인자값으로 숫자를 받지못해서 id를 지정했을때 고유의 값이라 숫자를 인식 못하여 getElementById 함수로 사용
                 // 예) id="5RLvZOBC1iPl3UEO0nwD"
-                let docID = document.getElementById(''+ docList.id +'')
+                let docListID = document.getElementById(''+ docList.id +'')
 
                 // siteListTempleat 변수에 정의한 html의 doc.id(문서의 고유id)값을 가져와서 매치하여 실행
-                docID.addEventListener('mouseenter', () => {
+                docListID.addEventListener('mouseenter', () => {
                     document.getElementById(''+ docList.id +'').insertAdjacentHTML('afterbegin', siteDetailViewTempleat);
 
                     document.querySelector('.site-detail-view').animate([
@@ -875,7 +877,7 @@ const getSiteListDetail = () => { // 등록한 포트폴리오 사이트 전체 
                 });
 
                 // 상단에 siteDetailViewTempleat 변수에 정의한 html의 site-detail-view-'+doc.id' 매치하여 이벤트 실행
-                docID.addEventListener('mouseleave', () => {
+                docListID.addEventListener('mouseleave', () => {
                     document.querySelector('.site-detail-view-'+docList.id).remove();
                 });
             }, 500);

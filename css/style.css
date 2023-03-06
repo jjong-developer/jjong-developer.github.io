@@ -365,10 +365,10 @@ img {max-width: 100%;}
     font-size: 14px;
 }
 .more-view {
-    margin: 50px 0px 0px 0px;
-    text-align: center;
-}
-.more-view button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 50px auto 0px auto;
     text-transform: uppercase;
 }
 
@@ -707,6 +707,13 @@ img {max-width: 100%;}
     display: flex;
     flex-wrap: wrap;
     gap: 20px;
+}
+#shoppingMallList .site-list-box.hidden,
+#hotelList .site-list-box.hidden,
+#solutionServiceList .site-list-box.hidden,
+#semiconductorList .site-list-box.hidden,
+#etcList .site-list-box.hidden {
+    display: none;
 }
 .site-list-box {
     position: relative;
