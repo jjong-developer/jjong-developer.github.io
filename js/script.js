@@ -552,58 +552,56 @@ dbAuth().onAuthStateChanged((user) => { // 로그인 상태 여/부
 /**
  * portfolio sites list view
  */
-let siteNoListTempleat = '' +
-    '<div>게시물이 없습니다.</div>';
+let limit = 4; // 처음 화면에 보여줄 게시물 갯수
+let limitAdd = 4; // 더보기 시 보여줄 게시물 갯수
+let moreViewTempleat =
+    '<button id="moreViewBtn" class="btn-type-2 more-view" type="button">' +
+        'more view' +
+    '</button>';
+let siteNoListTempleat = '<div>게시물이 없습니다.</div>';
 
 dbFireStore().collection('site').where('categoriesInfo.categories', '==', '쇼핑몰').get().then((result) => {
     if (result.docs.length === 0) {
         document.querySelector('#shoppingMallList').innerHTML = siteNoListTempleat;
     }
 
-    const moreViewTempleat = '' +
-        '<button id="moreViewBtn" class="btn-type-2" type="button">' +
-            'more view' +
-        '</button>';
+    result.forEach((docList) => {
+        let docListData = docList.data();
 
-    document.querySelector('.more-view').innerHTML = moreViewTempleat;
+        const siteListTempleat = '' +
+            '<div id="'+ docList.id +'" class="site-list-box">' +
+                '<img src="' + docListData.thumbnailUrl + '" title="' + docListData.title + '" />' +
+            '</div>';
 
-    dbFireStore().collection('site').where('categoriesInfo.categories', '==', '쇼핑몰').limit(4).get().then((result2) => { // 처음에 4개만 보여줄 것
-        let lastList = result2.docs[result2.docs.length - 1];
+        document.querySelector('#shoppingMallList').innerHTML += siteListTempleat; // 게시물 생성
+    });
 
-        result2.forEach((docList) => {
-            let docListData = docList.data();
+    document.querySelector('#shoppingMallList').insertAdjacentHTML('afterend', moreViewTempleat); // 더보기 버튼 생성
 
-            const siteListTempleat = '' +
-                '<div id="'+ docList.id +'" class="site-list-box">' +
-                    '<img src="' + docListData.thumbnailUrl + '" title="' + docListData.title + '" />' +
-                '</div>';
+    let siteListBox = document.querySelectorAll('#shoppingMallList .site-list-box');
+    let moreViewBtn = document.querySelector('#moreViewBtn');
+    let siteListBoxLength = siteListBox.length;
 
-            document.querySelector('#shoppingMallList').innerHTML += siteListTempleat;
-        });
+    if (siteListBoxLength > limit) { // 처음 화면에 보여주는 게시물들
+        for (let i = limit; i < siteListBoxLength; i += 1) {
+            siteListBox[i].classList.add('hidden');
+        }
+    }
 
-        document.querySelector('#moreViewBtn').addEventListener('click', () => {
-            // 게시물이 총 9개 있음......
-            console.log(document.querySelectorAll('#shoppingMallList .site-list-box').length + 4);
-            console.log(result.docs.length);
+    moreViewBtn.addEventListener('click', () => { // 더보기
+        let siteListBoxHidden = document.querySelectorAll('#shoppingMallList .site-list-box.hidden');
 
-            if ((document.querySelectorAll('#shoppingMallList .site-list-box').length + 4) >= result.docs.length) {
-                windowPopup('더 이상 게시물이 없습니다.');
-            } else {
-                dbFireStore().collection('site').where('categoriesInfo.categories', '==', '쇼핑몰').startAfter(lastList).limit(4).get().then((result3) => { // 게시물 4개씩 더 불러오기
-                    result3.forEach((docList) => {
-                        let docListData = docList.data();
+        if (siteListBoxHidden.length < limitAdd) {
+            limitAdd = siteListBoxHidden.length;
+        }
 
-                        const siteListMoreTempleat = '' +
-                            '<div id="'+ docList.id +'" class="site-list-box">' +
-                            '<img src="' + docListData.thumbnailUrl + '" title="' + docListData.title + '" />' +
-                            '</div>';
+        for (let i = 0; i < limitAdd; i += 1) {
+            siteListBoxHidden[i].classList.remove('hidden');
+        }
 
-                        document.querySelector('#shoppingMallList').innerHTML += siteListMoreTempleat;
-                    });
-                    getSiteListDetail();
-                });
-            }
-        });
+        if (document.querySelectorAll('#shoppingMallList .site-list-box.hidden').length === 0) {
+            moreViewBtn.style.display = 'none';
+        }
     });
 });
 
