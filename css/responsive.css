@@ -1,6 +1,6 @@
 @charset "UTF-8";
 
-@media (min-width: 768px) {
+@media all and (min-width: 768px) {
     /**
         header gnb
      */
@@ -9,7 +9,16 @@
     }
 }
 
-@media (max-width: 1310px) {
+@media all and (min-width: 940px) and (max-width: 1279px) {
+    /**
+        portfolio sites
+    */
+    .site-list-wrap {
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    }
+}
+
+@media all and (max-width: 1310px) {
     /**
         defalut
     */
@@ -21,7 +30,7 @@
     }
 }
 
-@media (max-width: 767px) {
+@media all and (max-width: 767px) {
     /**
         defalut
     */
@@ -36,7 +45,7 @@
         common
     */
     .json-type-1 dl {
-        padding: 60px 0 60px 40px;
+        padding: 30px 0 60px 40px;
     }
     .title {
         font-size: 44px;
@@ -96,7 +105,7 @@
     }
 }
 
-@media (max-width: 500px) {
+@media all and (max-width: 520px) {
     /**
         defalut
     */
@@ -113,6 +122,10 @@
     .title {
         font-size: 38px;
     }
+    .sub-title-wrap {
+        gap: 5px;
+        margin: 0px 0px 30px 0px;
+    }
     .sub-title {
         font-size: 18px;
     }
@@ -120,7 +133,7 @@
         font-size: 40px;
     }
     .json-type-1 dl {
-        padding: 60px 0 50px 20px;
+        padding: 30px 0 50px 20px;
     }
     .json-type-1 dl dt {
         font-size: 26px;
@@ -140,17 +153,39 @@
     }
 
     /**
+        portfolio sites
+    */
+    .tab-menu {
+        margin: 0px 0px 40px 0px;
+    }
+    .tab-menu ul {
+        gap: 15px 30px;
+    }
+    .site-list-wrap {
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    }
+    .site-detail-view .site-detail-view-type {
+        font-size: 16px;
+    }
+    .site-detail-view .site-detail-view-title {
+        font-size: 20px;
+    }
+    .site-detail-view .site-detail-view-description {
+        -webkit-line-clamp: 5;
+    }
+
+    /**
         use skills
     */
     .swiper-tool-container {
-        padding: 0 0 100px 0;
+        padding: 0px 0px 100px 0px;
     }
 
     /**
         footer
     */
     .footer {
-        padding: 50px 0 30px 0;
+        padding: 50px 0px 30px 0px;
     }
     .footer dl dt {
         font-size: 22px;

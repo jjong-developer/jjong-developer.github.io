@@ -683,8 +683,12 @@ const getSiteListDetail = () => { // 등록한 포트폴리오 사이트 글 전
                 const siteDetailViewTempleat = '' +
                     '<div class="site-detail-view site-detail-view-'+ docList.id +'">' +
                         '<div class="btn-wrap">' +
-                            '<button id="modifyBtn" class="btn-type-1 site-detail-view-btn" data-id="'+ docList.id +'" type="button">수정</button>' +
-                            '<button id="deleteBtn" class="btn-type-1 bg-danger site-detail-view-btn" data-id="'+ docList.id +'" type="button">삭제</button>' +
+                            '<button id="modifyBtn" class="icon-btn" data-id="'+ docList.id +'" type="button">' +
+                                '<img src="./images/edit.png" title="수정하기" />' +
+                            '</button>' +
+                            '<button id="deleteBtn" class="icon-btn" data-id="'+ docList.id +'" type="button">' +
+                                '<img src="./images/trash.png" title="삭제하기" />' +
+                            '</button>' +
                         '</div>' +
                         '<span class="site-detail-view-type">' + docListData.typeInfo['type'] + '</span>' +
                         '<h3 class="site-detail-view-title">' + docListData.title + '</h3>' +
