@@ -570,7 +570,6 @@ dbFireStore().collection('site').where('categoriesInfo.categories', '==', '호�
         document.querySelector('#hotelList').innerHTML += siteListTempleat;
     });
 
-    let moreViewBtn = document.querySelector('#moreViewBtn');
     let siteListBox = document.querySelectorAll('#hotelList .site-list-box');
     let siteListBoxThumbnail = document.querySelectorAll('#hotelList .site-list-box .thumbnail');
     let siteListBoxLength = siteListBox.length;
@@ -590,6 +589,7 @@ dbFireStore().collection('site').where('categoriesInfo.categories', '==', '호�
         }
     }
 
+    let moreViewBtn = document.querySelector('#moreViewBtn');
     moreViewBtn.addEventListener('click', () => { // 더보기
         let siteListBoxHidden = document.querySelectorAll('#hotelList .site-list-box.hidden');
 
@@ -619,7 +619,6 @@ dbFireStore().collection('site').where('categoriesInfo.categories', '==', '쇼�
         document.querySelector('#shoppingMallList').innerHTML += siteListTempleat; // 게시물 생성
     });
 
-    let moreViewBtn = document.querySelector('#moreViewBtn');
     let siteListBox = document.querySelectorAll('#shoppingMallList .site-list-box');
     let siteListBoxThumbnail = document.querySelectorAll('#shoppingMallList .site-list-box .thumbnail');
     let siteListBoxLength = siteListBox.length;
@@ -639,6 +638,7 @@ dbFireStore().collection('site').where('categoriesInfo.categories', '==', '쇼�
         }
     }
 
+    let moreViewBtn = document.querySelector('#moreViewBtn');
     moreViewBtn.addEventListener('click', () => { // 더보기
         let siteListBoxHidden = document.querySelectorAll('#shoppingMallList .site-list-box.hidden');
 
@@ -668,7 +668,6 @@ dbFireStore().collection('site').where('categoriesInfo.categories', '==', '교�
         document.querySelector('#solutionServiceList').innerHTML += siteListTempleat;
     });
 
-    let moreViewBtn = document.querySelector('#moreViewBtn');
     let siteListBox = document.querySelectorAll('#solutionServiceList .site-list-box');
     let siteListBoxThumbnail = document.querySelectorAll('#solutionServiceList .site-list-box .thumbnail');
     let siteListBoxLength = siteListBox.length;
@@ -688,6 +687,7 @@ dbFireStore().collection('site').where('categoriesInfo.categories', '==', '교�
         }
     }
 
+    let moreViewBtn = document.querySelector('#moreViewBtn');
     moreViewBtn.addEventListener('click', () => { // 더보기
         let siteListBoxHidden = document.querySelectorAll('#solutionServiceList .site-list-box.hidden');
 
@@ -717,7 +717,6 @@ dbFireStore().collection('site').where('categoriesInfo.categories', '==', '제�
         document.querySelector('#semiconductorList').innerHTML += siteListTempleat;
     });
 
-    let moreViewBtn = document.querySelector('#moreViewBtn');
     let siteListBox = document.querySelectorAll('#semiconductorList .site-list-box');
     let siteListBoxThumbnail = document.querySelectorAll('#semiconductorList .site-list-box .thumbnail');
     let siteListBoxLength = siteListBox.length;
@@ -737,6 +736,7 @@ dbFireStore().collection('site').where('categoriesInfo.categories', '==', '제�
         }
     }
 
+    let moreViewBtn = document.querySelector('#moreViewBtn');
     moreViewBtn.addEventListener('click', () => { // 더보기
         let siteListBoxHidden = document.querySelectorAll('#semiconductorList .site-list-box.hidden');
 
@@ -766,7 +766,6 @@ dbFireStore().collection('site').where('categoriesInfo.categories', '==', '기�
         document.querySelector('#etcList').innerHTML += siteListTempleat;
     });
 
-    let moreViewBtn = document.querySelector('#moreViewBtn');
     let siteListBox = document.querySelectorAll('#etcList .site-list-box');
     let siteListBoxThumbnail = document.querySelectorAll('#etcList .site-list-box .thumbnail');
     let siteListBoxLength = siteListBox.length;
@@ -786,6 +785,7 @@ dbFireStore().collection('site').where('categoriesInfo.categories', '==', '기�
         }
     }
 
+    let moreViewBtn = document.querySelector('#moreViewBtn');
     moreViewBtn.addEventListener('click', () => { // 더보기
         let siteListBoxHidden = document.querySelectorAll('#etcList .site-list-box.hidden');
 
