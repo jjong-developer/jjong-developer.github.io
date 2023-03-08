@@ -164,6 +164,9 @@
     .site-list-wrap {
         grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     }
+    .site-list-box {
+        width: unset !important;
+    }
     .site-detail-view .site-detail-view-type {
         font-size: 16px;
     }
@@ -172,6 +175,7 @@
     }
     .site-detail-view .site-detail-view-description {
         -webkit-line-clamp: 5;
+        word-break: break-all;
     }
 
     /**
