@@ -145,20 +145,21 @@ const portfolioSite = () => { // 포트폴리오 사이트 글 등록, 수정 �
             '<div class="modal-select-box-wrap">' +
                 '<select id="siteCategories" class="modal-select-box">' +
                     '<option value="" selected="selected" disabled>분류 선택</option>' +
-                    '<option value="쇼핑몰">쇼핑몰</option>' +
                     '<option value="호텔/팬션">호텔/팬션</option>' +
+                    '<option value="쇼핑몰">쇼핑몰</option>' +
                     '<option value="교육/IT솔루션">교육/IT솔루션</option>' +
                     '<option value="제조장비 반도체산업">제조장비 반도체산업</option>' +
                     '<option value="기타">기타</option>' +
                 '</select>' +
                 '<select id="siteType" class="modal-select-box">' +
                     '<option value="" selected="selected" disabled>유형 선택</option>' +
-                    '<option value="WEB">WEB</option>' +
-                    '<option value="WEB/APP">WEB/APP</option>' +
+                    '<option value="Responsive Web" title="반응형">Responsive Web</option>' +
+                    '<option value="Adaptive Web" title="적응형">Adaptive Web</option>' +
+                    '<option value="Hybrid App" title="하이브리드 앱">Hybrid App</option>' +
                 '</select>' +
             '</div>' +
             '<input id="siteName" type="text" value="" autocomplete="off" placeholder="사이트 이름을(를) 입력해주세요." />' +
-            '<textarea id="siteDescription" class="modal-textarea" placeholder="간략한 설명을(를) 입력해주세요.&#13;&#10;참여 기여도를 같이 기재해주세요."></textarea>' +
+            '<textarea id="siteDescription" class="modal-textarea" placeholder="예시)&#13;&#10;참여 기여도 : Design(%), Publishing(%), Front(%), Back(%)&#13;&#10;사용 기술 : ~&#13;&#10;간략한 설명"></textarea>' +
             '<input id="siteLink" type="text" value="" autocomplete="off" placeholder="포트폴리오 주소을(를) 입력해주세요." />' +
             '<div class="file-box">' +
                 '<input class="file-name" value="첨부파일명" disabled>' +
@@ -469,7 +470,7 @@ dbAuth().onAuthStateChanged((user) => { // 로그인 상태 여/부
                             categoriesInfo: categoriesJSON, // 분류 & 선택 여부
                             typeInfo: typeJSON, // 유형 & 선택 여부
                             title: siteName.value, // 이름
-                            description: siteDescription.value, // 설명
+                            description: siteDescription.value.replace(/(?:\r\n|\r|\n)/g, '<br />'), // 설명
                             link: siteLink.value, // 주소
                             thumbnailUrl: siteThumbnailUrl, // 썸네일 이미지 경로
                         };
@@ -554,35 +555,85 @@ dbAuth().onAuthStateChanged((user) => { // 로그인 상태 여/부
  */
 let limit = 4; // 처음 화면에 보여줄 게시물 갯수
 let limitAdd = 4; // 더보기 시 보여줄 게시물 갯수
-let moreViewTempleat =
-    '<button id="moreViewBtn" class="btn-type-2 more-view" type="button">' +
-        'more view' +
-    '</button>';
+let moreViewTempleat = '<button id="moreViewBtn" class="btn-type-2 more-view" type="button">' + 'more view' + '</button>';
 let siteNoListTempleat = '<div>게시물이 없습니다.</div>';
 
-dbFireStore().collection('site').where('categoriesInfo.categories', '==', '쇼핑몰').get().then((result) => {
-    if (result.docs.length === 0) {
-        document.querySelector('#shoppingMallList').innerHTML = siteNoListTempleat;
-    }
-
+dbFireStore().collection('site').where('categoriesInfo.categories', '==', '호텔/팬션').get().then((result) => {
     result.forEach((docList) => {
         let docListData = docList.data();
 
         const siteListTempleat = '' +
             '<div id="'+ docList.id +'" class="site-list-box">' +
-                '<img src="' + docListData.thumbnailUrl + '" title="' + docListData.title + '" />' +
+                '<img class="thumbnail" src="' + docListData.thumbnailUrl + '" title="' + docListData.title + '" />' +
+            '</div>';
+
+        document.querySelector('#hotelList').innerHTML += siteListTempleat;
+    });
+
+    let moreViewBtn = document.querySelector('#moreViewBtn');
+    let siteListBox = document.querySelectorAll('#hotelList .site-list-box');
+    let siteListBoxThumbnail = document.querySelectorAll('#hotelList .site-list-box .thumbnail');
+    let siteListBoxLength = siteListBox.length;
+
+    if (result.size === 0) { // 총 게시물이 1개도 없을때
+        document.querySelector('#hotelList').innerHTML = siteNoListTempleat;
+    } else if (result.size > 4) { // 총 게시물이 4개이상일때
+        document.querySelector('#hotelList').insertAdjacentHTML('afterend', moreViewTempleat);
+    } else if (result.size === 1) {
+        siteListBox[0].style.cssText = `width: 530px;`;
+        siteListBoxThumbnail[0].style.cssText = `width: auto; height: auto; box-shadow: rgb(0 0 0 / 30%) 20px 20px 12px 0px;`;
+    }
+
+    if (siteListBoxLength > limit) {
+        for (let i = limit; i < siteListBoxLength; i += 1) {
+            siteListBox[i].classList.add('hidden');
+        }
+    }
+
+    moreViewBtn.addEventListener('click', () => { // 더보기
+        let siteListBoxHidden = document.querySelectorAll('#hotelList .site-list-box.hidden');
+
+        if (siteListBoxHidden.length < limitAdd) {
+            limitAdd = siteListBoxHidden.length;
+        }
+
+        for (let i = 0; i < limitAdd; i += 1) {
+            siteListBoxHidden[i].classList.remove('hidden');
+        }
+
+        if (document.querySelectorAll('#hotelList .site-list-box.hidden').length === 0) {
+            moreViewBtn.style.display = 'none';
+        }
+    });
+});
+
+dbFireStore().collection('site').where('categoriesInfo.categories', '==', '쇼핑몰').get().then((result) => {
+    result.forEach((docList) => {
+        let docListData = docList.data();
+
+        const siteListTempleat = '' +
+            '<div id="'+ docList.id +'" class="site-list-box">' +
+                '<img class="thumbnail" src="' + docListData.thumbnailUrl + '" title="' + docListData.title + '" />' +
             '</div>';
 
         document.querySelector('#shoppingMallList').innerHTML += siteListTempleat; // 게시물 생성
     });
 
-    document.querySelector('#shoppingMallList').insertAdjacentHTML('afterend', moreViewTempleat); // 더보기 버튼 생성
-
-    let siteListBox = document.querySelectorAll('#shoppingMallList .site-list-box');
     let moreViewBtn = document.querySelector('#moreViewBtn');
+    let siteListBox = document.querySelectorAll('#shoppingMallList .site-list-box');
+    let siteListBoxThumbnail = document.querySelectorAll('#shoppingMallList .site-list-box .thumbnail');
     let siteListBoxLength = siteListBox.length;
 
-    if (siteListBoxLength > limit) { // 처음 화면에 보여주는 게시물들
+    if (result.size === 0) { // 총 게시물이 1개도 없을때
+        document.querySelector('#shoppingMallList').innerHTML = siteNoListTempleat;
+    } else if (result.size > 4) { // 총 게시물이 4개이상일때
+        document.querySelector('#shoppingMallList').insertAdjacentHTML('afterend', moreViewTempleat);
+    } else if (result.size === 1) {
+        siteListBox[0].style.cssText = `width: 530px;`;
+        siteListBoxThumbnail[0].style.cssText = `width: auto; height: auto; box-shadow: rgb(0 0 0 / 30%) 20px 20px 12px 0px;`;
+    }
+
+    if (siteListBoxLength > limit) {
         for (let i = limit; i < siteListBoxLength; i += 1) {
             siteListBox[i].classList.add('hidden');
         }
@@ -605,71 +656,150 @@ dbFireStore().collection('site').where('categoriesInfo.categories', '==', '쇼�
     });
 });
 
-dbFireStore().collection('site').where('categoriesInfo.categories', '==', '호텔/팬션').get().then((result) => {
-    if (result.docs.length === 0) {
-        document.querySelector('#hotelList').innerHTML = siteNoListTempleat;
-    }
-
-    result.forEach((docList) => {
-        let docListData = docList.data();
-
-        const siteListTempleat = '' +
-            '<div id="'+ docList.id +'" class="site-list-box">' +
-                '<img src="' + docListData.thumbnailUrl + '" title="' + docListData.title + '" />' +
-            '</div>';
-
-        document.querySelector('#hotelList').innerHTML += siteListTempleat;
-    });
-});
-
 dbFireStore().collection('site').where('categoriesInfo.categories', '==', '교육/IT솔루션').get().then((result) => {
-    if (result.docs.length === 0) {
-        document.querySelector('#solutionServiceList').innerHTML = siteNoListTempleat;
-    }
-
     result.forEach((docList) => {
         let docListData = docList.data();
 
         const siteListTempleat = '' +
             '<div id="'+ docList.id +'" class="site-list-box">' +
-                '<img src="' + docListData.thumbnailUrl + '" title="' + docListData.title + '" />' +
+                '<img class="thumbnail" src="' + docListData.thumbnailUrl + '" title="' + docListData.title + '" />' +
             '</div>';
 
         document.querySelector('#solutionServiceList').innerHTML += siteListTempleat;
     });
+
+    let moreViewBtn = document.querySelector('#moreViewBtn');
+    let siteListBox = document.querySelectorAll('#solutionServiceList .site-list-box');
+    let siteListBoxThumbnail = document.querySelectorAll('#solutionServiceList .site-list-box .thumbnail');
+    let siteListBoxLength = siteListBox.length;
+
+    if (result.size === 0) { // 총 게시물이 1개도 없을때
+        document.querySelector('#solutionServiceList').innerHTML = siteNoListTempleat;
+    } else if (result.size > 4) { // 총 게시물이 4개이상일때
+        document.querySelector('#solutionServiceList').insertAdjacentHTML('afterend', moreViewTempleat);
+    } else if (result.size === 1) {
+        siteListBox[0].style.cssText = `width: 530px;`;
+        siteListBoxThumbnail[0].style.cssText = `width: auto; height: auto; box-shadow: rgb(0 0 0 / 30%) 20px 20px 12px 0px;`;
+    }
+
+    if (siteListBoxLength > limit) {
+        for (let i = limit; i < siteListBoxLength; i += 1) {
+            siteListBox[i].classList.add('hidden');
+        }
+    }
+
+    moreViewBtn.addEventListener('click', () => { // 더보기
+        let siteListBoxHidden = document.querySelectorAll('#solutionServiceList .site-list-box.hidden');
+
+        if (siteListBoxHidden.length < limitAdd) {
+            limitAdd = siteListBoxHidden.length;
+        }
+
+        for (let i = 0; i < limitAdd; i += 1) {
+            siteListBoxHidden[i].classList.remove('hidden');
+        }
+
+        if (document.querySelectorAll('#solutionServiceList .site-list-box.hidden').length === 0) {
+            moreViewBtn.style.display = 'none';
+        }
+    });
 });
 
 dbFireStore().collection('site').where('categoriesInfo.categories', '==', '제조장비 반도체산업').get().then((result) => {
-    if (result.docs.length === 0) {
-        document.querySelector('#semiconductorList').innerHTML = siteNoListTempleat;
-    }
-
     result.forEach((docList) => {
         let docListData = docList.data();
 
         const siteListTempleat = '' +
             '<div id="'+ docList.id +'" class="site-list-box">' +
-                '<img src="' + docListData.thumbnailUrl + '" title="' + docListData.title + '" />' +
+                '<img class="thumbnail" src="' + docListData.thumbnailUrl + '" title="' + docListData.title + '" />' +
             '</div>';
 
         document.querySelector('#semiconductorList').innerHTML += siteListTempleat;
     });
+
+    let moreViewBtn = document.querySelector('#moreViewBtn');
+    let siteListBox = document.querySelectorAll('#semiconductorList .site-list-box');
+    let siteListBoxThumbnail = document.querySelectorAll('#semiconductorList .site-list-box .thumbnail');
+    let siteListBoxLength = siteListBox.length;
+
+    if (result.size === 0) { // 총 게시물이 1개도 없을때
+        document.querySelector('#semiconductorList').innerHTML = siteNoListTempleat;
+    } else if (result.size > 4) { // 총 게시물이 4개이상일때
+        document.querySelector('#semiconductorList').insertAdjacentHTML('afterend', moreViewTempleat);
+    } else if (result.size === 1) {
+        siteListBox[0].style.cssText = `width: 530px;`;
+        siteListBoxThumbnail[0].style.cssText = `width: auto; height: auto; box-shadow: rgb(0 0 0 / 30%) 20px 20px 12px 0px;`;
+    }
+
+    if (siteListBoxLength > limit) {
+        for (let i = limit; i < siteListBoxLength; i += 1) {
+            siteListBox[i].classList.add('hidden');
+        }
+    }
+
+    moreViewBtn.addEventListener('click', () => { // 더보기
+        let siteListBoxHidden = document.querySelectorAll('#semiconductorList .site-list-box.hidden');
+
+        if (siteListBoxHidden.length < limitAdd) {
+            limitAdd = siteListBoxHidden.length;
+        }
+
+        for (let i = 0; i < limitAdd; i += 1) {
+            siteListBoxHidden[i].classList.remove('hidden');
+        }
+
+        if (document.querySelectorAll('#semiconductorList .site-list-box.hidden').length === 0) {
+            moreViewBtn.style.display = 'none';
+        }
+    });
 });
 
 dbFireStore().collection('site').where('categoriesInfo.categories', '==', '기타').get().then((result) => {
-    if (result.docs.length === 0) {
-        document.querySelector('#etcList').innerHTML = siteNoListTempleat;
-    }
-
     result.forEach((docList) => {
         let docListData = docList.data();
 
         const siteListTempleat = '' +
             '<div id="'+ docList.id +'" class="site-list-box">' +
-                '<img src="' + docListData.thumbnailUrl + '" title="' + docListData.title + '" />' +
+                '<img class="thumbnail" src="' + docListData.thumbnailUrl + '" title="' + docListData.title + '" />' +
             '</div>';
 
         document.querySelector('#etcList').innerHTML += siteListTempleat;
+    });
+
+    let moreViewBtn = document.querySelector('#moreViewBtn');
+    let siteListBox = document.querySelectorAll('#etcList .site-list-box');
+    let siteListBoxThumbnail = document.querySelectorAll('#etcList .site-list-box .thumbnail');
+    let siteListBoxLength = siteListBox.length;
+
+    if (result.size === 0) { // 총 게시물이 1개도 없을때
+        document.querySelector('#etcList').innerHTML = siteNoListTempleat;
+    } else if (result.size > 4) { // 총 게시물이 4개이상일때
+        document.querySelector('#etcList').insertAdjacentHTML('afterend', moreViewTempleat);
+    } else if (result.size === 1) {
+        siteListBox[0].style.cssText = `width: 530px;`;
+        siteListBoxThumbnail[0].style.cssText = `width: auto; height: auto; box-shadow: rgb(0 0 0 / 30%) 20px 20px 12px 0px;`;
+    }
+
+    if (siteListBoxLength > limit) {
+        for (let i = limit; i < siteListBoxLength; i += 1) {
+            siteListBox[i].classList.add('hidden');
+        }
+    }
+
+    moreViewBtn.addEventListener('click', () => { // 더보기
+        let siteListBoxHidden = document.querySelectorAll('#etcList .site-list-box.hidden');
+
+        if (siteListBoxHidden.length < limitAdd) {
+            limitAdd = siteListBoxHidden.length;
+        }
+
+        for (let i = 0; i < limitAdd; i += 1) {
+            siteListBoxHidden[i].classList.remove('hidden');
+        }
+
+        if (document.querySelectorAll('#etcList .site-list-box.hidden').length === 0) {
+            moreViewBtn.style.display = 'none';
+        }
     });
 });
 
@@ -695,7 +825,7 @@ const getSiteListDetail = () => { // 등록한 포트폴리오 사이트 글 전
                         '<span class="site-detail-view-period">' + '(' + docListData.projectPeriod['startPeriod'] + ' ~ ' + docListData.projectPeriod['endPeriod'] + ')' + '</span>' +
                         '<p class="site-detail-view-description">' + docListData.description + '</p>' +
                         '<a class="site-detail-view-link" href="' + docListData.link + '" target="_blank">' +
-                            'view more' +
+                            'site link' +
                             '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="none" d="M0 0h24v24H0z"/><path class="fill" d="M13.172 12l-4.95-4.95 1.414-1.414L16 12l-6.364 6.364-1.414-1.414z" fill="#ffffff"/></svg>' +
                         '</a>' +
                     '</div>';
@@ -820,7 +950,7 @@ const getSiteListDetail = () => { // 등록한 포트폴리오 사이트 글 전
                                                 categoriesInfo: categoriesJSON, // 분류 & 선택 여부
                                                 typeInfo: typeJSON, // 유형 & 선택 여부
                                                 title: siteName.value, // 이름
-                                                description: siteDescription.value, // 설명
+                                                description: siteDescription.value.replace(/(?:\r\n|\r|\n)/g, '<br />'), // 설명
                                                 link: siteLink.value, // 주소
                                                 thumbnailUrl: (siteThumbnailUrl !== '') ? siteThumbnailUrl : document.querySelector('.file-name').value, // 썸네일 이미지 경로
                                             };
