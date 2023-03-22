@@ -41,3 +41,8 @@ ChannelIO('boot', { // 커스터마이징 가능한 옵션들
     "customLauncherSelector": "#channelTalk", // , id / class 여러개 선택 사용 가능
     "hideChannelButtonOnBoot": true, // 말풍선 아이콘 보이기/숨김 여부
 });
+
+/**
+ * kakao login
+ */
+window.Kakao.init('3cf5dab3f3b41d2f2a19232b6acf37ba');
