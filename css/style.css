@@ -115,7 +115,7 @@ input[type="date"]::-webkit-datetime-edit-year-field {
 textarea {font-family: 'Noto Sans KR', sans-serif; width: 100%; resize: none; margin: 0 0 15px 0; font-size: 15px; font-weight: 400 !important;}
 textarea::focus {border: 1px solid #3e54d3;}
 select::focus {border: 1px solid #3e54d3;}
-p {line-height: 1.2; margin:0; font-size: 16px;}
+p {line-height: 1.2; margin:0px;}
 em {font-style: unset;}
 img {max-width: 100%;}
 .nav,
@@ -124,15 +124,14 @@ img {max-width: 100%;}
 .footer-info-wrap {
     width: 100%;
     max-width: 1310px;
-    margin: 0 auto;
-    padding: 0 20px 0 20px;
+    margin: 0px auto;
+    padding: 0px 20px 0px 20px;
 }
 
 /**
     common
 */
 .opacity0 {opacity: 0% !important;}
-.flex-start {align-items: start !important;}
 .section {
     height: 100%;
     padding-top: 100px !important;
@@ -194,7 +193,7 @@ img {max-width: 100%;}
 }
 .ide-style .json-type-2 {
     background: #000000;
-    padding: 40px 50px 40px 50px;
+    padding: 40px 45px 40px 45px;
     margin: 10px 0px 10px 0px;
 }
 .json-type-2 {
@@ -652,8 +651,8 @@ img {max-width: 100%;}
 }
 .about-content ul li {
     display: flex;
-    align-items: center;
-    margin: 0 0 15px 0;
+    align-items: start;
+    margin: 0 0 30px 0;
 }
 .about-content ul li:last-child {
     margin: 0 0 0 0;
@@ -668,24 +667,27 @@ img {max-width: 100%;}
     justify-content: center;
     min-width: 90px;
     background: #3254d2;
-    margin: 0 10px 0 0;
+    margin: 0px 10px 0px 0px;
     padding: 3px 10px 3px 10px;
+    border-radius: 5px;
+    font-weight: 400;
 }
 .about-content ul li a {
-    text-transform: initial;
-    color: #0687f0;
+    color: rgba(255, 255, 255, 0.9);
+    text-decoration: underline;
+}
+.about-content ul li p {
+    color: rgba(255, 255, 255, 0.9);
+    line-height: unset;
 }
 .about-defalut-content {
-
+    margin: 0px 0px 15px 0px;
 }
-.about-defalut-content ul li {
-    margin: 0 0 15px 0;
+.about-defalut-content:last-child {
+    margin: 0px;
 }
-.about-defalut-content ul li:last-child {
-    margin: 0 0 0 0;
-}
-.about-defalut-content ul li span {
-    display: block;
+.about-defalut-content p:first-child {
+    color: #3fcfa6;
 }
 
 /**
