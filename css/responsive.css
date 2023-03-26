@@ -127,7 +127,7 @@
         margin: 0px 0px 30px 0px;
     }
     .sub-title {
-        font-size: 18px;
+        font-size: 16px;
     }
     .json-type-1 strong {
         font-size: 40px;
@@ -145,11 +145,34 @@
         padding: 40px 0 40px 0;
         border-left: none;
     }
+    .ide-style .json-type-2 {
+        padding: 40px 20px 40px 20px;
+    }
     .modal-wrap {
         max-width: 380px;
+        height: 100%;
+        overflow-y: scroll;
     }
     .modal-date-box-wrap {
         display: block;
+    }
+    .modal-title h2 {
+        font-size: 22px;
+    }
+    .popup-wrap {
+        width: 100%;
+    }
+
+    /**
+        about
+    */
+    .about-content ul li {
+        display: block;
+        margin: 0px 0px 50px 0px;
+    }
+    .about-content ul li > span:first-child {
+        display: inline-block;
+        margin: 0px 0px 10px 0px;
     }
 
     /**
@@ -168,7 +191,7 @@
         width: unset !important;
     }
     .site-detail-view .site-detail-view-type {
-        font-size: 16px;
+        font-size: 18px;
     }
     .site-detail-view .site-detail-view-title {
         font-size: 20px;
