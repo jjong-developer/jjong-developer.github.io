@@ -489,7 +489,6 @@ dbAuth().onAuthStateChanged((user) => { // 로그인 상태 여/부
  * portfolio sites list view
  */
 let limit = 4; // 처음 화면에 보여줄 게시물 갯수
-let limitAdd = 4; // 더보기 시 보여줄 게시물 갯수
 let moreViewTempleat = '<button id="moreViewBtn" class="btn-type-2 more-view" type="button">' + 'more view' + '</button>';
 let siteNoListTempleat = '<div>게시물이 없습니다.</div>';
 
@@ -524,7 +523,9 @@ dbFireStore().collection('site').where('categoriesInfo.categories', '==', '호�
         }
     }
 
-    let moreViewBtn = document.querySelector('#moreViewBtn');
+    let moreViewBtn = document.querySelector('#hotel #moreViewBtn');
+    let limitAdd = 4; // 더보기 시 보여줄 게시물 갯수
+
     moreViewBtn.addEventListener('click', () => { // 더보기
         let siteListBoxHidden = document.querySelectorAll('#hotelList .site-list-box.hidden');
 
@@ -573,7 +574,9 @@ dbFireStore().collection('site').where('categoriesInfo.categories', '==', '쇼�
         }
     }
 
-    let moreViewBtn = document.querySelector('#moreViewBtn');
+    let moreViewBtn = document.querySelector('#shoppingMall #moreViewBtn');
+    let limitAdd = 4; // 더보기 시 보여줄 게시물 갯수
+
     moreViewBtn.addEventListener('click', () => { // 더보기
         let siteListBoxHidden = document.querySelectorAll('#shoppingMallList .site-list-box.hidden');
 
@@ -622,7 +625,9 @@ dbFireStore().collection('site').where('categoriesInfo.categories', '==', '교�
         }
     }
 
-    let moreViewBtn = document.querySelector('#moreViewBtn');
+    let moreViewBtn = document.querySelector('#solutionService #moreViewBtn');
+    let limitAdd = 4; // 더보기 시 보여줄 게시물 갯수
+
     moreViewBtn.addEventListener('click', () => { // 더보기
         let siteListBoxHidden = document.querySelectorAll('#solutionServiceList .site-list-box.hidden');
 
@@ -671,7 +676,9 @@ dbFireStore().collection('site').where('categoriesInfo.categories', '==', '제�
         }
     }
 
-    let moreViewBtn = document.querySelector('#moreViewBtn');
+    let moreViewBtn = document.querySelector('#semiconductor #moreViewBtn');
+    let limitAdd = 4; // 더보기 시 보여줄 게시물 갯수
+
     moreViewBtn.addEventListener('click', () => { // 더보기
         let siteListBoxHidden = document.querySelectorAll('#semiconductorList .site-list-box.hidden');
 
@@ -720,7 +727,9 @@ dbFireStore().collection('site').where('categoriesInfo.categories', '==', '기�
         }
     }
 
-    let moreViewBtn = document.querySelector('#moreViewBtn');
+    let moreViewBtn = document.querySelector('#etc #moreViewBtn');
+    let limitAdd = 4; // 더보기 시 보여줄 게시물 갯수
+
     moreViewBtn.addEventListener('click', () => { // 더보기
         let siteListBoxHidden = document.querySelectorAll('#etcList .site-list-box.hidden');
 
