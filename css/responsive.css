@@ -105,6 +105,12 @@
     }
 }
 
+@media all and (max-width: 620px) {
+    .site-list-wrap {
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    }
+}
+
 @media all and (max-width: 520px) {
     /**
         defalut
@@ -183,9 +189,6 @@
     }
     .tab-menu ul {
         gap: 15px 30px;
-    }
-    .site-list-wrap {
-        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     }
     .site-list-box {
         width: unset !important;
