@@ -807,6 +807,19 @@ const getSiteListDetail = () => { // 등록한 포트폴리오 사이트 글 전
     dbFireStore().collection('site').get().then((result) => {
         result.forEach((docList) => {
             let docListData = docList.data();
+            let isDescription;
+
+            if (isDescription === undefined) {
+                isDescription = docListData.description;
+            }
+
+            window.addEventListener('resize', () => {
+                if (matchMedia('screen and (min-width: 940px) and (max-width: 1120px)').matches) {
+                    isDescription = '지원하지 않는 해상도이며 원문 설명글을 보실 수 없습니다.';
+                } else {
+                    isDescription = docListData.description;
+                }
+            });
 
             // settimeout 임시로.. 추후에 변경해야함
             setTimeout(() => {
@@ -823,7 +836,7 @@ const getSiteListDetail = () => { // 등록한 포트폴리오 사이트 글 전
                         '<span class="site-detail-view-type">' + docListData.typeInfo['type'] + '</span>' +
                         '<h3 class="site-detail-view-title">' + docListData.title + '</h3>' +
                         '<span class="site-detail-view-period">' + '(' + docListData.projectPeriod['startPeriod'] + ' ~ ' + docListData.projectPeriod['endPeriod'] + ')' + '</span>' +
-                        '<p class="site-detail-view-description">' + docListData.description + '</p>' +
+                        '<p class="site-detail-view-description"></p>' +
                         '<a class="site-detail-view-link" href="' + docListData.link + '" target="_blank">' +
                             'site link' +
                             '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="none" d="M0 0h24v24H0z"/><path class="fill" d="M13.172 12l-4.95-4.95 1.414-1.414L16 12l-6.364 6.364-1.414-1.414z" fill="#ffffff"/></svg>' +
@@ -837,6 +850,8 @@ const getSiteListDetail = () => { // 등록한 포트폴리오 사이트 글 전
                 // siteListTempleat 변수에 정의한 html의 doc.id(문서의 고유id)값을 가져와서 매치하여 실행
                 docListID.addEventListener('mouseenter', () => {
                     document.getElementById(''+ docList.id +'').insertAdjacentHTML('afterbegin', siteDetailViewTempleat);
+
+                    document.querySelector('.site-detail-view-description').innerHTML += isDescription;
 
                     document.querySelector('.site-detail-view').animate([
                         // from keyframe
