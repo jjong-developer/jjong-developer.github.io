@@ -615,15 +615,20 @@ img {max-width: 100%;}
     text-align: center;
     z-index: 1;
 }
+.my-info-box span {
+    display: block;
+    color: #585858;
+    font-weight: 500;
+}
+.my-info-box span:hover {
+    color: rgb(62, 84, 211);
+}
+.user-info-modify label {
+    display: block;
+    margin: 0px 0px 5px 0px;
+}
 .password-reset-box {
     margin: 0px;
-}
-.user-delete {
-    color: #585858;
-    font-weight: 600;
-}
-.user-delete:hover {
-    color: rgb(62, 84, 211);
 }
 
 /**
