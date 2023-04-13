@@ -3,7 +3,7 @@
 /**
  * firebase config variable
  */
-const dbAuth = firebase.auth // 회원가입, 로그인, 로그아웃, 패스워드 재설정, 회원탈퇴
+const dbAuth = firebase.auth // 회원가입, 로그인, 로그아웃, 비밀번호 재설정, 회원탈퇴
 const dbFireStore = firebase.firestore // 게시물 등록, 수정, 삭제
 const dbStorage = firebase.storage // 저장 공간
 const dbStorageRef = dbStorage().ref()
@@ -30,6 +30,7 @@ const tabMenuCategories = document.querySelectorAll('.tab-menu-categories li');
 const tabMenuContent = document.querySelectorAll('.tab-menu-content');
 let isUser; // 로그인 여/부 상태값을 받기 위함 -> html 파일내에서 생성한 태그는 사용안하는 용도이고 script내에서 동적으로 추가한 html만 사용하기 위함
 let superAdmin = ['jongwook2.kim@gmail.com']; // 관리자 권한 이메일 설정
+let usersList;
 let isSuperAdmin, isModalBg = false;
 let isCategories, isType;
 let fileUpload;
@@ -390,21 +391,41 @@ dbAuth().onAuthStateChanged((user) => { // 로그인 상태 여/부
 
         let myInfoBox = '' +
             '<div class="my-info-box">' +
-                '<span class="user-delete">회원탈퇴</span>' +
+                '<span class="user-delete">회원 탈퇴</span>' +
+                '<span class="user-modify">정보 수정</span>' +
             '</div>';
 
-        document.querySelector('.user-name').addEventListener('mouseenter', () => { // 내 정보 박스 생성
+        document.querySelector('.user-name').addEventListener('mouseenter', () => { // 내 정보 박스 폼 생성
             document.querySelector('.user-name').insertAdjacentHTML('beforeend', myInfoBox);
 
-            document.querySelector('.user-delete').addEventListener('click', () => {
+            document.querySelector('.user-delete').addEventListener('click', () => { // 회원 탈퇴
                 windowPopup('정말 회원 탈퇴하시겠습니까?', '<button id="windowPopupCancel" class="bg-danger" type="button">취소</button>');
 
                 document.querySelector('#windowPopupOk').id = 'userDeleteBtn';
                 document.querySelectorAll('#userDeleteBtn').forEach((el) => {
-                    el.addEventListener('click', () => { // 회원탈퇴
+                    el.addEventListener('click', () => {
                         el.closest('#popupBg').remove();
 
                         if (user.emailVerified) { // 이메일 인증한 유저는 본인확인 처리 과정을 패스함 (boolean 값)
+
+                            // dbFireStore().collection('users').get().then((result) => {
+                            //     result.forEach((docList) => {
+                            //         let docListDataTest = docList.data();
+                            //         console.log(docListDataTest);
+                            //         console.log(docList);
+                            //
+                            //         if (docList.id === docListDataTest.id) {
+                            //             console.log("aaa");
+                            //             console.log(docList.id);
+                            //             dbFireStore().collection('users').doc(docList.id).delete().then(() => {
+                            //                 console.log("bbb");
+                            //             }).catch((error) => {
+                            //                 console.log(error);
+                            //             });
+                            //         }
+                            //     });
+                            // });
+
                             user.delete().then(() => {
                                 windowPopup('회원 탈퇴처리가 정상적으로 완료되었습니다.<br>이용해주셔서 감사합니다 :)');
 
@@ -418,9 +439,26 @@ dbAuth().onAuthStateChanged((user) => { // 로그인 상태 여/부
                     });
                 });
             });
+
+            document.querySelector('.user-modify').addEventListener('click', () => { // 정보 수정
+                modal(
+            '회원 정보를 수정해주세요 :)',
+        '<div class="user-info-modify">' +
+                    '<label for="">이름</label>' +
+                    '<input type="text" name="name" value="'+ user.displayName + '" autocomplete="off" disabled="disabled" />' +
+                    '<label for="">이메일</label>' +
+                    '<input type="text" name="email" value="'+ user.email +'" autocomplete="off" disabled="disabled" placeholder="이메일을(를) 입력해주세요." />' +
+                    '<label for="">비밀번호</label>' +
+                    '<input type="password" name="password" value="" autocomplete="off" placeholder="비밀번호을(를) 입력해주세요." />' +
+                    '<label for="">비밀번호 확인</label>' +
+                    '<input type="password" name="re_password" value="" autocomplete="off" placeholder="비밀번호을(를) 한번 더 입력해주세요." />' +
+                    '<button class="modal-btn-type-1" type="button" onclick="signInUp(this);">수정하기</button>' +
+                '</div>',
+                );
+            });
         });
 
-        document.querySelector('.user-name').addEventListener('mouseleave', () => { // 내 정보 박스 삭제
+        document.querySelector('.user-name').addEventListener('mouseleave', () => { // 내 정보 박스 폼 삭제
             document.querySelector('.my-info-box').remove();
         });
 
@@ -449,7 +487,7 @@ dbAuth().onAuthStateChanged((user) => { // 로그인 상태 여/부
                     '<div class="email-auth-box">' +
                         '<input type="text" name="email" value="" autocomplete="off" placeholder="이메일을(를) 입력해주세요." />' +
                     '</div>' +
-                    '<input type="password" name="password" value="" autocomplete="off" placeholder="패스워드을(를) 입력해주세요." />' +
+                    '<input type="password" name="password" value="" autocomplete="off" placeholder="비밀번호을(를) 입력해주세요." />' +
                     '<button class="sign-btn modal-btn-type-1" type="button" onclick="signInUp(this);">로그인하기</button>' +
                 '</div>' +
                 '<div class="sns-sign-in-box">' +
@@ -475,7 +513,7 @@ dbAuth().onAuthStateChanged((user) => { // 로그인 상태 여/부
                         '<button type="button" onclick="signUp(this);">일반 회원가입</button>' +
                     '</div>' +
                     '<div class="sign-info qa-password-find">' +
-                        '<p>패스워드를 잊어버리셨나요?</p>' +
+                        '<p>비밀번호를 잊어버리셨나요?</p>' +
                         '<button type="button" onclick="passwordReset();">재설정</button>' +
                     '</div>' +
                 '</div>' +
@@ -985,7 +1023,7 @@ const getSiteListDetail = () => { // 등록한 포트폴리오 사이트 글 전
                                 });
                             });
                             // } else {
-                            //     windowPopup('회원이 아니시라면 회원가입 후 이용 해주세요.');
+                            //     windowPopup('회원이 아니시라면 회원 가입 후 이용 해주세요.');
                             // }
                         });
                     });
@@ -1019,7 +1057,7 @@ const getSiteListDetail = () => { // 등록한 포트폴리오 사이트 글 전
                                 });
                             });
                             // } else {
-                            //     windowPopup('회원이 아니시라면 회원가입 후 이용 해주세요.');
+                            //     windowPopup('회원이 아니시라면 회원 가입 후 이용 해주세요.');
                             // }
                         });
                     });
@@ -1053,7 +1091,7 @@ function signUp(self) {
         document.querySelector('.sns-sign-in-box').style.display = 'block';
         document.querySelector('.qa-password-find').style.display = 'flex';
         // document.querySelector('.email-certification-btn').remove();
-    } else if (!self.closest('.sign-auth-wrap').classList.contains('switch-mode')) { // 회원가입 하기
+    } else if (!self.closest('.sign-auth-wrap').classList.contains('switch-mode')) { // 회원 가입 하기
         self.closest('.sign-auth-wrap button').textContent = '로그인';
         document.querySelector('.modal-title h2').textContent = '회원가입을 해주세요 :)';
         document.querySelector('.qa-member p').textContent = '계정이 이미 있으신가요?';
@@ -1062,11 +1100,11 @@ function signUp(self) {
         document.querySelector('.sns-sign-in-box').style.display = 'none';
         document.querySelector('.qa-password-find').style.display = 'none';
 
-        let inputNameHtml = '<input type="text" name="name" value="" autocomplete="off" placeholder="이름을(를) 입력해주세요." />';
+        let inputNameHtml = '<input type="text" name="name" value="" autocomplete="off" placeholder="반드시 실명을(를) 입력해주세요." />';
         // let emailCertificationHtml = '<button id="emailCertificationBtn" class="email-certification-btn modal-btn-type-2" type="button">인증하기</button>';
         let inputPasswordHtml = '' +
             '<div class="input-wrap">' +
-                '<input type="password" name="re_password" value="" autocomplete="off" placeholder="패스워드을(를) 한번 더 입력해주세요." />' +
+                '<input type="password" name="re_password" value="" autocomplete="off" placeholder="비밀번호을(를) 한번 더 입력해주세요." />' +
                 '<img class="eyes" src="./images/eyes_on.png" alt="" />' +
             '</div>';
 
@@ -1118,6 +1156,7 @@ function signUp(self) {
 function signInUp(self) {
     let userEmail = document.querySelector('input[name=email]').value;
     let userPassword = (!!document.querySelector('input[name=password]') !== false) ? document.querySelector('input[name=password]').value : '';
+    let user_rePassword = (!!document.querySelector('input[name=re_password]') !== false) ? document.querySelector('input[name=re_password]').value : '';
 
     if (self.textContent === '로그인하기') {
         if (!userEmail) {
@@ -1127,7 +1166,7 @@ function signInUp(self) {
             windowPopup('이메일 형식이 올바르지 않습니다.');
             return;
         } else if (!userPassword) {
-            windowPopup('패스워드을(를) 입력해주세요.');
+            windowPopup('비밀번호을(를) 입력해주세요.');
             return;
         }
 
@@ -1152,7 +1191,7 @@ function signInUp(self) {
                 });
             }
         }).catch(error => {
-            windowPopup('회원정보가 일치하지 않습니다.<br>회원이 아니시라면 회원가입 후 이용해주세요.');
+            windowPopup('회원 정보가 일치하지 않습니다.<br>회원이 아니시라면 회원 가입 후 이용해주세요.');
         });
     } else if (self.textContent === 'google') {
         dbAuth().signInWithRedirect(googleProvider); // 페이지 전환되어 인증 절차 진행
@@ -1190,9 +1229,32 @@ function signInUp(self) {
         //     }
         // };
         // getKakaoToken();
+    } else if (self.textContent === '수정하기') {
+        dbAuth().currentUser.updatePassword(userPassword).then(() => {
+            windowPopup('정상적으로 회원 정보가 수정 되었습니다.');
+            document.querySelector('#windowPopupOk').addEventListener('click', () => {
+                reload();
+            });
+        }).catch(error => {
+            console.log(error.message);
+
+            if (error.message === 'Password should be at least 6 characters') {
+                windowPopup('비밀번호는 6자 이상이어야 합니다.');
+                return;
+            }
+
+            if (!userPassword || !user_rePassword) {
+                windowPopup('비밀번호을(를) 입력해주세요.');
+                return;
+            } else if (userPassword !== user_rePassword) {
+                windowPopup('비밀번호가 일치하지 않습니다.');
+                return;
+            }
+
+            windowPopup('회원 정보 수정에 실패하였습니다, 잠시 후 다시 시도해주세요.');
+        });
     } else if (self.textContent === '가입하기') {
         let userName = document.querySelector('input[name=name]').value;
-        let user_rePassword = document.querySelector('input[name=re_password]').value;
 
         if (!userName) {
             windowPopup('이름을(를) 입력해주세요.');
@@ -1204,14 +1266,20 @@ function signInUp(self) {
             windowPopup('이메일 형식이 올바르지 않습니다.');
             return;
         } else if (!userPassword || !user_rePassword) {
-            windowPopup('패스워드을(를) 입력해주세요.');
+            windowPopup('비밀번호을(를) 입력해주세요.');
             return;
         } else if (userPassword !== user_rePassword) {
-            windowPopup('패스워드가 일치하지 않습니다.');
+            windowPopup('비밀번호가 일치하지 않습니다.');
             return;
         }
 
         dbAuth().createUserWithEmailAndPassword(userEmail, userPassword).then(result => { // 회원가입
+            // let usersDataSave = {
+            //     name: userName, // 이름
+            //     email: userEmail, // 이메일
+            // };
+            // dbFireStore().collection('users').add(usersDataSave).then(() => {}) // 회원 가입 정보를 별도로 저장
+
             result.user.updateProfile({
                 displayName: userName
             }).then(() => {
@@ -1227,9 +1295,10 @@ function signInUp(self) {
             console.log(error.message);
 
             if (error.message === 'Password should be at least 6 characters') {
-                windowPopup('패스워드는 6자 이상이어야 합니다.');
+                windowPopup('비밀번호는 6자 이상이어야 합니다.');
                 return;
             }
+
             if (error.message === 'The email address is already in use by another account.') {
                 windowPopup('이미 사용 중인 이메일 주소입니다.');
                 return;
@@ -1242,7 +1311,7 @@ function signInUp(self) {
             windowPopup('이메일 형식이 올바르지 않습니다.');
             return;
         } else {
-            dbAuth().sendPasswordResetEmail(userEmail).then(() => { // 패스워드 재설정
+            dbAuth().sendPasswordResetEmail(userEmail).then(() => { // 비밀번호 재설정
                 windowPopup('해당 이메일로 링크를 전송하였습니다.<br>메일함을 확인해주세요.');
             }).catch(error => {
                 windowPopup('잠시 후 다시 시도해주세요<br>' + error.message);
@@ -1253,7 +1322,7 @@ function signInUp(self) {
 
 function passwordReset() {
     document.querySelector('.sign-in-box').className = 'password-reset-box';
-    document.querySelector('.modal-title h2').textContent = '이메일로 패스워드 재설정 링크를 보내드려요 :)';
+    document.querySelector('.modal-title h2').textContent = '이메일로 비밀번호 재설정 링크를 보내드려요 :)';
     document.querySelector('.sign-btn').textContent = '보내기';
     document.querySelector('.sns-sign-in-box').remove();
     document.querySelector('.sign-info-box').remove();
