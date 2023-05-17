@@ -1191,7 +1191,7 @@ function signInUp(self) {
                 });
             }
         }).catch(error => {
-            windowPopup('회원 정보가 일치하지 않습니다.<br>회원이 아니시라면 회원 가입 후 이용해주세요.');
+            windowPopup('아이디 또는 비밀번호가 일치하지 않습니다.<br>회원이 아니시라면 회원 가입 후 이용해주세요.');
         });
     } else if (self.textContent === 'google') {
         dbAuth().signInWithRedirect(googleProvider); // 페이지 전환되어 인증 절차 진행
