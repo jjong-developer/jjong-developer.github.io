@@ -1015,7 +1015,7 @@ const getSiteListDetail = () => { // 등록한 포트폴리오 사이트 글 전
                                                 reload();
                                             });
                                         }).catch((error) => {
-                                            windowPopup('게시물 삭제 중 오류가 발생했습니다, 잠시 후 다시 시도해주세요.<br>' + error.message);
+                                            windowPopup('게시물 수정 중 오류가 발생했습니다, 잠시 후 다시 시도해주세요.<br>' + error.message);
                                         });
                                     } else {
                                         windowPopup('권한이 없습니다.<br>시스템 관리자에게 문의바랍니다.');
