@@ -874,7 +874,7 @@ const getSiteListDetail = () => { // 등록한 포트폴리오 사이트 글 전
                         '</div>' +
                         '<span class="site-detail-view-type">' + docListData.typeInfo['type'] + '</span>' +
                         '<h3 class="site-detail-view-title">' + docListData.title + '</h3>' +
-                        '<span class="site-detail-view-period">' + '(' + docListData.projectPeriod['startPeriod'] + ' ~ ' + docListData.projectPeriod['endPeriod'] + ')' + '</span>' +
+                        '<span class="site-detail-view-period">프로젝트 기간 ' + '(' + docListData.projectPeriod['startPeriod'] + ' ~ ' + docListData.projectPeriod['endPeriod'] + ')' + '</span>' +
                         '<p class="site-detail-view-description"></p>' +
                         '<a class="site-detail-view-link" href="' + docListData.link + '" target="_blank">' +
                             'site link' +
