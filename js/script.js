@@ -12,7 +12,7 @@ const facebookProvider = new dbAuth.FacebookAuthProvider() // 페이스북 간�
 // const githubProvider = new dbAuth.GithubAuthProvider() // 깃허브 간편 로그인 (https://github.com/settings/ 개발자 사이트 등록)
 
 /**
- * global variable
+ * variable
  */
 const today = new Date();
 const year = today.getFullYear();
@@ -30,7 +30,6 @@ const tabMenuCategories = document.querySelectorAll('.tab-menu-categories li');
 const tabMenuContent = document.querySelectorAll('.tab-menu-content');
 let isUser; // 로그인 여/부 상태값을 받기 위함 -> html 파일내에서 생성한 태그는 사용안하는 용도이고 script내에서 동적으로 추가한 html만 사용하기 위함
 let superAdmin = ['jongwook2.kim@gmail.com']; // 관리자 권한 이메일 설정
-let usersList;
 let isSuperAdmin, isModalBg = false;
 let isCategories, isType;
 let fileUpload;
