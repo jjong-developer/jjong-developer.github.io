@@ -137,6 +137,11 @@ img {max-width: 100%;}
     padding-top: 100px !important;
 }
 .section-pdt {padding-top: 200px !important;}
+.line {
+    margin-top: 30px;
+    padding-bottom: 30px;
+    border-top: 1px dashed #ffffff;
+}
 .title {
     font-family: 'Roboto', sans-serif;
     font-size: 54px;
@@ -691,8 +696,11 @@ img {max-width: 100%;}
 .about-defalut-content:last-child {
     margin: 0px;
 }
-.about-defalut-content p:first-child {
+.about-defalut-content .title {
     color: #3fcfa6;
+    font-size: 16px;
+    font-weight: 300;
+    text-transform: unset;
 }
 
 /**
